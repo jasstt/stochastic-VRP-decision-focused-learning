@@ -2,86 +2,99 @@
 
 An end-to-end research prototype for solving the **Cash-in-Transit (CIT) Stochastic Vehicle Routing Problem (SVRP)** using **Decision-Focused Learning (SPO+)**.
 
-This project transitions a traditional Deterministic VRP system into a state-of-the-art Stochastic VRP system. By integrating Operations Research (Two-Stage Stochastic LP) with Machine Learning (Smart Predict-then-Optimize / SPO+), the system directly learns to minimize optimization regret (specifically, costly ATM stockouts) rather than just minimizing prediction errors (MSE).
+This project transitions a traditional deterministic VRP system into a stochastic VRP system. By integrating Operations Research (Two-Stage Stochastic LP) with Machine Learning (Smart Predict-then-Optimize / SPO+), the system directly learns to minimize optimization regret (specifically, costly ATM stockouts) rather than just minimizing prediction error (MSE).
 
-## 🚀 Project Highlights
-- **Reduced Stockout Rate:** Decreased from **42.4%** (Deterministic) to **25.8%** (SPO+), essentially matching the Oracle/Perfect Information lower bound.
-- **Financial Impact:** Achieved a cost reduction of **51.1%**, translating to significant annual savings in stockout penalty costs.
-- **Methodology:** Implemented an analytical dual-gradient based SPO+ algorithm, achieving a 40x speedup in training compared to finite-difference methods.
+## 🚀 Project highlights
 
-## 🏗️ Pipeline & Architecture
+- **Reduced stockout rate:** decreased from **42.4%** (deterministic) to **25.8%** (SPO+), essentially matching the Oracle / perfect-information lower bound.
+- **Financial impact:** achieved a cost reduction of **51.1%** on the synthetic benchmark, translating to significant savings in stockout penalty costs.
+- **Methodology:** implemented an analytical dual-gradient SPO+ algorithm, achieving a 40x training speedup compared to finite-difference methods.
 
-The project is structured into 5 sequential phases:
+## 🏗️ Pipeline & architecture
 
-### Phase 1: Data & Scenario Generation (`phase1*`)
+The project is structured into 5 sequential phases.
+
+### Phase 1 — Data & scenario generation (`phase1*`)
 - Simulates 365 days of realistic ATM cash demand across a 20-node network.
-- Generates 39-dimensional rich feature sets (holidays, salary days, locations).
-- Generates 100 Sample Average Approximation (SAA) scenarios for Stochastic LP.
+- Generates a 39-dimensional feature set (holidays, salary days, location effects).
+- Generates 100 Sample Average Approximation (SAA) scenarios for the stochastic LP.
 
-### Phase 2: Deterministic Baseline (`phase2*`)
+### Phase 2 — Deterministic baseline (`phase2*`)
 - Solves a standard Capacitated VRP (CVRP) with MTZ constraints using the *average* expected demand.
-- Represents traditional legacy routing systems. Fails to account for variance, leading to massive stockouts on high-demand days.
+- Represents a traditional, point-forecast routing approach. Fails to account for demand variance, leading to large stockouts on high-demand days.
 
-### Phase 3: Stochastic LP Oracle (`phase3*`)
-- Formulates a Two-Stage Stochastic LP using the generated SAA scenarios.
-- Acts as the Oracle (Lower Bound), representing the best possible performance if the true probability distributions were perfectly known.
+### Phase 3 — Stochastic LP oracle (`phase3*`)
+- Formulates a two-stage stochastic LP using the generated SAA scenarios.
+- Acts as the Oracle (lower bound), representing the best possible performance if the true demand distribution were perfectly known in advance.
 
-### Phase 4: Decision-Focused Learning (SPO+) (`phase4*`)
-- Compares traditional Machine Learning (`MSE Predict-then-Optimize`) against Decision-Focused Learning (`SPO+`).
-- **MSE** minimizes standard prediction error (Mean Squared Error).
-- **SPO+** incorporates the optimization problem into the loss function. It uses the dual variables (shadow prices) of the LP to compute gradients, learning to "over-predict" strategically to avoid catastrophic stockout penalties.
+### Phase 4 — Decision-focused learning, SPO+ (`phase4*`)
+- Compares a traditional ML approach (`MSE predict-then-optimize`) against decision-focused learning (`SPO+`).
+- **MSE** minimizes standard prediction error (mean squared error).
+- **SPO+** incorporates the optimization problem directly into the loss function. It uses the dual variables (shadow prices) of the LP to compute gradients, learning to "over-predict" strategically where it matters, to avoid costly stockout penalties.
 
-### Phase 5: Final Benchmarking (`phase5*`)
-- Aggregates the results of all models into a comprehensive executive dashboard.
-- Evaluates the Value of Stochastic Solution (VSS) and the Value of Learning (VOL).
+### Phase 5 — Final benchmarking (`phase5*`)
+- Aggregates the results of all models into a single comparison report.
+- Evaluates the Value of the Stochastic Solution (VSS) and the value added by decision-focused learning.
 
-## 📊 Results Summary
+## 📊 Results summary
 
-| Model | Avg. Daily Cost (TL) | Stockout Rate | Annual Cost (M TL) |
-|-------|----------------------|---------------|--------------------|
-| **Deterministic CVRP** | 480,691 | 42.4% | 175.5 |
-| **Stochastic LP (Oracle)** | 244,191 | 25.4% | 89.1 |
-| **MSE Predict & Opt** | 234,320 | 27.7% | 85.5 |
-| **SPO+ Decision-Focused**| 235,113 | **25.8%** | 85.8 |
+| Model | Avg. daily cost (TL) | Stockout rate | Annual cost (M TL) |
+|---|---|---|---|
+| Deterministic CVRP | 480,691 | 42.4% | 175.5 |
+| Stochastic LP (Oracle) | 244,191 | 25.4% | 89.1 |
+| MSE predict & optimize | 234,320 | 27.7% | 85.5 |
+| **SPO+ decision-focused** | 235,113 | **25.8%** | 85.8 |
 
-> **Key Takeaway:** While MSE produces a lower absolute prediction error, **SPO+** achieves a significantly lower stockout rate by understanding the asymmetric cost of the routing problem. SPO+ performs almost identically to the Oracle.
+**Key takeaway:** while the MSE model produces a lower absolute prediction error, SPO+ achieves a meaningfully lower stockout rate by accounting for the asymmetric cost structure of the routing problem (under-forecasting is far more expensive than over-forecasting). SPO+ performs almost identically to the Oracle, despite never having perfect knowledge of the demand distribution.
 
-![Final Benchmark Report](phase5_final_report.png)
+![Final benchmark report](phase5_final_report.png)
 
-## 💻 How to Run
+## 💻 How to run
 
-Install the required dependencies:
+Install dependencies:
+
 ```bash
 pip install numpy pandas scikit-learn pulp matplotlib scipy
 ```
 
 Run the pipeline sequentially:
+
 ```bash
-# 1. Generate Data
+# 1. Generate data
 python phase1a_network_setup.py
 python phase1b_demand_simulation.py
-python phase1c_feature_engineering.py
+python phase1c_distribution_fitting.py
 python phase1d_saa_scenarios.py
 
-# 2. Run Deterministic Baseline
+# 2. Deterministic baseline
 python phase2a_deterministic_cvrp.py
 
-# 3. Run Stochastic Oracle
-python phase3a_stochastic_lp.py
+# 3. Stochastic LP oracle
+python phase3a_stochastic_loading.py
 
-# 4. Train and Evaluate SPO+
+# 4. Train and evaluate SPO+
 python phase4_spo_learning.py
 
-# 5. Generate Final Benchmark Report
+# 5. Final benchmark report
 python phase5_final_report.py
 ```
 
-## 🛠️ Tech Stack
-- **Python 3**
-- **PuLP** (Mixed-Integer Linear Programming)
-- **Scikit-Learn** (Standard Scalers, MSE baselines)
-- **Matplotlib** (Visualizations)
-- **NumPy / Pandas** (Data manipulation)
+## 🛠️ Tech stack
+
+- Python 3
+- PuLP (mixed-integer / linear programming)
+- scikit-learn (scalers, MSE baselines)
+- Matplotlib (visualizations)
+- NumPy / Pandas (data manipulation)
+
+## ⚠️ Notes & limitations
+
+All results are computed on **synthetic data** generated to mimic realistic CIT/ATM demand patterns (salary-day effects, weekend effects, location variance). They are intended to demonstrate the methodology — stochastic VRP formulation and decision-focused learning — rather than to represent any specific real-world deployment. Absolute figures (cost, stockout rate, savings) should not be read as production estimates; the relative ordering between approaches (stochastic > deterministic, SPO+ > MSE) is the result that's consistent with the broader literature on decision-focused learning.
+
+## 📄 License
+
+This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
 
 ---
-*Developed for Arute Solutions CIT Routing+ / Cash+ R&D Prototype.*
+
+*An independent research exploration into CIT cash routing under demand uncertainty.*
