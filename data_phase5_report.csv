@@ -1,0 +1,6 @@
+sistem,aciklama,gunluk_maliyet,stockout_pct,yillik_maliyet_M,det_e_gore_pct
+Det.,Ortalama talep ile sabit rotalama,480691,42.4,175.5,0.0
+Stoch.,SAA ile gercek dagilim bilgisi,244191,25.4,89.1,49.2
+Q75,P75 tahmini (newsvendor),244415,28.1,89.2,49.2
+MSE,MSE tahmini + LP optimizasyon,234320,27.7,85.5,51.3
+SPO+,SPO+ regret minimizasyon,235113,25.8,85.8,51.1
