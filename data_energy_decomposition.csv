@@ -1,0 +1,6 @@
+Yöntem,Çözüm,Rota Maliyeti,Kapasite Cezası,Ziyaret Cezası,Toplam QUBO Enerjisi,Kapasite Kullanımı (TL),Feasible?
+Kaba Kuvvet,"[0, 1, 1, 0, 1]",5.0,0.144,0.0,5.144,"235,000",✅ Evet
+PuLP/MILP (düz.),"[0, 1, 1, 0, 1]",5.0,0.144,0.0,5.144,"235,000",✅ Evet
+QAOA (p=1),"[1, 1, 1, 1, 0]",5.888889,0.064,0.0,-32.6856,"240,000",✅ Evet
+QAOA (p=2),"[0, 0, 1, 1, 1]",4.777778,1.6,0.0,-31.6891,"200,000",✅ Evet
+QAOA (p=3),"[1, 1, 1, 1, 0]",5.888889,0.064,0.0,-32.8153,"240,000",✅ Evet

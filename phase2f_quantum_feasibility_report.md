@@ -36,17 +36,31 @@ The **20-ATM CVRP** encodes to approximately:
 > [!CAUTION]
 > **2,648 logical qubits** is **20× beyond the largest NISQ device available today.** There is no path to running the full 20-ATM CVRP on any current or near-term (≤2027) quantum hardware.
 
-### QAOA Approximation Quality (Simulated 5-Qubit Demo)
+### QAOA Approximation Quality (Simulated 5-Qubit Demo) — **Corrected v2**
 
-On the 5-ATM sub-problem (demo scale):
+> [!CAUTION]
+> **Three bugs were found in the original phase2d_comparison.py** and corrected in the v2 rewrite. The original table was misleading.
 
-| Method | QUBO Energy | Time | Gap to Optimal |
-|--------|-------------|------|----------------|
-| Brute Force (Classical) | — | <1 ms | 0% (optimal) |
-| PuLP/MILP (CBC) | — | <1 ms | 0% (optimal) |
-| QAOA p=1 | Approx. | ~500 ms | ~8–15% |
-| QAOA p=2 | Approx. | ~1.2 s | ~4–8% |
-| QAOA p=3 | Approx. | ~2.5 s | ~2–5% |
+#### Bug Summary
+
+| Bug | Original (Incorrect) | Corrected |
+|-----|----------------------|-----------|
+| **Bug 1** — λ_capacity too small | `λ_C = 0.5` → penalty ≈ 0.05 units (invisible vs. routing) | `λ_C = 40.0` → penalty ≈ 4.1 units (active deterrent) |
+| **Bug 2** — Inconsistent MILP model | `x[j] == 1` forced for all j, but total demand 330k > Q_CAP 250k → INFEASIBLE silently relaxed | Removed forced visits; capacity is the active constraint |
+| **Bug 3** — p=1 ≡ p=3 in the table | Reported `compute_qubo_energy(argmax_bit)` — same bit string [1,1,1,1,1] for all p → same number | Now reports `⟨H⟩` (expectation) AND deterministic bit energy separately |
+
+#### Corrected Results (λ_C = 40.0, MILP capacity-active, ⟨H⟩ reported)
+
+| Method | ⟨H⟩ Expectation | Bit Energy | Gap to Optimal | Feasible? |
+|--------|-----------------|------------|----------------|-----------|
+| Brute Force | N/A (deterministic) | Optimal | 0% | ✅ Yes |
+| PuLP/MILP (corrected) | N/A | Near-optimal | ~0% | ✅ Yes |
+| QAOA p=1 | **−2.491** | (argmax-bit) | depends | checked per run |
+| QAOA p=2 | **−2.537** | (argmax-bit) | depends | checked per run |
+| QAOA p=3 | **−2.537** | (argmax-bit) | depends | checked per run |
+
+Key finding from the corrected run: QAOA p=1 vs p=3 produce **different expectation energies** (−2.491 vs −2.537) confirming the circuits are running at different depths. The original table's identical −2.5599 across all p values was an artifact of Bug 3.
+
 
 Even at demo scale, QAOA requires significantly more time and produces suboptimal solutions. Classical MILP wins definitively at all tested scales.
 

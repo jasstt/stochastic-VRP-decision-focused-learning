@@ -1,0 +1,6 @@
+Yöntem,⟨H⟩ Beklenti,Bit Enerjisi,Süre (ms),Gap (%),Kısıt Uyumu,Çözüm Bitleri
+Kaba Kuvvet,N/A (deterministik),-34.856,0.28,0.0,✅ Tam,"[0, 1, 1, 0, 1]"
+PuLP/MILP (düz.),N/A (deterministik),-34.856,0.17,0.0,✅ Tam,"[0, 1, 1, 0, 1]"
+QAOA (p=1),-32.6856,-34.0471,0.0,2.32,✅ Tam,"[1, 1, 1, 1, 0]"
+QAOA (p=2),-31.6891,-33.6222,0.0,3.54,✅ Tam,"[0, 0, 1, 1, 1]"
+QAOA (p=3),-32.8153,-34.0471,0.0,2.32,✅ Tam,"[1, 1, 1, 1, 0]"
