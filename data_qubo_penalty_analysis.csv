@@ -1,0 +1,10 @@
+λ (penalty),1 ihlal ceza (TL),Rota tasarrufu (TL),Oran (tasarruf/ceza),Durum
+0.01,631,199,0.315,İyi
+0.05,3154,199,0.063,Fazla sıkı (arama bozulur)
+0.1,6308,199,0.031,Fazla sıkı (arama bozulur)
+0.3,18924,199,0.01,Fazla sıkı (arama bozulur)
+0.5,31540,199,0.006,Fazla sıkı (arama bozulur)
+1.0,63080,199,0.003,Fazla sıkı (arama bozulur)
+2.0,126161,199,0.002,Fazla sıkı (arama bozulur)
+5.0,315402,199,0.001,Fazla sıkı (arama bozulur)
+10.0,630804,199,0.0,Fazla sıkı (arama bozulur)

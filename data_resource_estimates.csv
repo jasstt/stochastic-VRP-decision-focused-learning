@@ -1,0 +1,5 @@
+ATM Sayısı,Araç Sayısı,Mantıksal Qubit,Fiziksel Qubit,Toplam T-Gate,QAOA Çalışma Süresi,MILP Çalışma Süresi,Kuantum Avantajlı?
+20,4,"2,648","1,188,952","208,000",21 ms,1.0 dk,⏳ ~2030+ (erken FT donanım)
+50,8,"26,440","11,871,560","2,240,000",224 ms,9.9 dk,⏳ ~2035+ (gelişmiş FT donanım)
+100,15,"181,650","81,560,850","15,900,000",1.6 sn,55.9 dk,❌ Fiziksel sınır (donanım yok)
+200,30,"1,386,600","622,583,400","123,600,000",12.4 sn,5.3 sa,❌ Fiziksel sınır (donanım yok)

@@ -1,0 +1,6 @@
+Yöntem,QUBO Enerjisi,Süre (ms),Optimal'e Uzaklık,Çözüm Kalitesi,Kısıt Uyumu,Qubit / Değişken Sayısı
+Kaba Kuvvet (Klasik),-2.6103,0.56,0.0,Optimal ✓,Tam,2^5 durum
+PuLP/MILP (CBC),-2.5599,403.23,1.93,Optimal ✓ (Infeasible),Tam,5 binary + 6 kısıt
+"QAOA (p=1, NumPy sim.)",-2.5599,541.3,1.93,Yaklaşık (α≈1.020),İhlal (330k > 250k TL),"5 qubit, 2 parametre"
+"QAOA (p=2, NumPy sim.)",-2.5599,6400.6,1.93,Yaklaşık (α≈1.020),İhlal (330k > 250k TL),"5 qubit, 4 parametre"
+"QAOA (p=3, NumPy sim.)",-2.5599,7903.3,1.93,Yaklaşık (α≈1.020),İhlal (330k > 250k TL),"5 qubit, 6 parametre"
