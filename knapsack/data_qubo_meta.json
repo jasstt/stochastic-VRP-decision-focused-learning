@@ -1,0 +1,47 @@
+{
+  "qubo_meta": {
+    "n_qubits": 1,
+    "lambda": 0.375,
+    "W_residual": 3.0,
+    "const_offset": 3.375,
+    "subset_w": [
+      8.0
+    ],
+    "subset_v": [
+      8.0
+    ],
+    "subset_indices": [
+      1
+    ]
+  },
+  "lambda_val": 0.375,
+  "lambda_thresh": {
+    "v_max": 8.0,
+    "w_min": 8.0,
+    "lambda_min_required": 0.125,
+    "lambda_safe_3x": 0.375,
+    "max_violation": 8.0
+  },
+  "W_residual": 3,
+  "frac_idx": [
+    1
+  ],
+  "fixed1_idx": [
+    0,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    13,
+    14,
+    16,
+    17,
+    19
+  ],
+  "v_locked1": 193,
+  "w_locked1": 67
+}

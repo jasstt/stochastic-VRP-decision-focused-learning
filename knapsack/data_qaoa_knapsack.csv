@@ -1,0 +1,4 @@
+p,⟨H⟩ Beklenti,Argmax Enerji,Değer Terimi,Ceza Terimi,KS Değeri,Kısıt,Süre (sn)
+1,-2.0,1.375,-8.0,9.375,8.0,❌ INFEASIBLE (ihlal: 5.00),0.209
+2,-2.0,1.375,-8.0,9.375,8.0,❌ INFEASIBLE (ihlal: 5.00),0.197
+3,-2.0,1.375,-8.0,9.375,8.0,❌ INFEASIBLE (ihlal: 5.00),0.278

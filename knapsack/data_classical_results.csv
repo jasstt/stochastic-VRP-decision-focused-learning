@@ -1,0 +1,4 @@
+Yöntem,Toplam Değer,Gap (%),Kapasite Kullanımı,Kapasite Limiti,Kısıt Uyumu,Süre (ms)
+Dinamik Programlama (DP),193,0.0,67,70,✅ FEASIBLE,0.4139
+LP Relaxation + Rounding,193,0.0,67,70,✅ FEASIBLE,2.6499
+Greedy (v/w oranı),193,0.0,67,70,✅ FEASIBLE,0.0109

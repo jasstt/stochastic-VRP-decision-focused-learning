@@ -1,0 +1,105 @@
+{
+  "qaoa_results": {
+    "1": {
+      "p": 1,
+      "gammas": [
+        2.356197122536051
+      ],
+      "betas": [
+        0.7854062785396301
+      ],
+      "expect_energy": -2.0,
+      "argmax_bits": [
+        1
+      ],
+      "argmax_energy": 1.375,
+      "argmax_value": 8.0,
+      "argmax_value_term": -8.0,
+      "argmax_penalty_term": 9.375,
+      "argmax_total_qubo": 1.375,
+      "feasible": false,
+      "feasibility": "\u274c INFEASIBLE (ihlal: 5.00)",
+      "n_iterations": 36,
+      "init_energy": -1.844599,
+      "elapsed_s": 0.209,
+      "gate_layers": 2
+    },
+    "2": {
+      "p": 2,
+      "gammas": [
+        0.846563833983332,
+        1.6502982281062804
+      ],
+      "betas": [
+        1.2221785478669012,
+        2.01070136860008
+      ],
+      "expect_energy": -2.0,
+      "argmax_bits": [
+        1
+      ],
+      "argmax_energy": 1.375,
+      "argmax_value": 8.0,
+      "argmax_value_term": -8.0,
+      "argmax_penalty_term": 9.375,
+      "argmax_total_qubo": 1.375,
+      "feasible": false,
+      "feasibility": "\u274c INFEASIBLE (ihlal: 5.00)",
+      "n_iterations": 53,
+      "init_energy": -0.231063,
+      "elapsed_s": 0.197,
+      "gate_layers": 4
+    },
+    "3": {
+      "p": 3,
+      "gammas": [
+        0.6980245705245296,
+        3.3703378543143363,
+        0.822481612172916
+      ],
+      "betas": [
+        2.4893430661448086,
+        1.414981255952442,
+        1.5916139549825936
+      ],
+      "expect_energy": -2.0,
+      "argmax_bits": [
+        1
+      ],
+      "argmax_energy": 1.375,
+      "argmax_value": 8.0,
+      "argmax_value_term": -8.0,
+      "argmax_penalty_term": 9.375,
+      "argmax_total_qubo": 1.375,
+      "feasible": false,
+      "feasibility": "\u274c INFEASIBLE (ihlal: 5.00)",
+      "n_iterations": 63,
+      "init_energy": -0.59095,
+      "elapsed_s": 0.278,
+      "gate_layers": 6
+    }
+  },
+  "bf_optimal_boundary_value": 0.0,
+  "lambda_val": 0.375,
+  "W_residual": 3,
+  "v_locked1": 193,
+  "frac_idx": [
+    1
+  ],
+  "fixed1_idx": [
+    0,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    13,
+    14,
+    16,
+    17,
+    19
+  ]
+}

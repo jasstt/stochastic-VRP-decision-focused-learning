@@ -1,0 +1,7 @@
+Yöntem,Toplam Değer,DP Optimal'e Gap (%),Kapasite Kullanımı,Kapasite Limiti,Kısıt Uyumu,Süre (ms)
+DP (Exact Optimal),193,0.0,67,70,✅ FEASIBLE,0.123
+LP Relaxation + Round,193,0.0,67,70,✅ FEASIBLE,0.246
+Greedy (v/w oranı),193,0.0,67,70,✅ FEASIBLE,0.007
+Hibrit QAOA p=1 (⟨H⟩=-2.000),193,0.0,67,70,✅ FEASIBLE,186.164
+Hibrit QAOA p=2 (⟨H⟩=-2.000),193,0.0,67,70,✅ FEASIBLE,204.514
+Hibrit QAOA p=3 (⟨H⟩=-2.000),193,0.0,67,70,✅ FEASIBLE,285.225

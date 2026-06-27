@@ -1,0 +1,7 @@
+Yöntem,Değer Terimi (-Σv·x),Ceza Terimi (λ·ihlal²),Toplam QUBO,Knapsack Değeri,Kapasite İhlali,Feasible?
+DP (Exact Optimal),-193.0,3.375,-189.625,193.0,-3.0,✅
+LP Relaxation + Round,-193.0,3.375,-189.625,193.0,-3.0,✅
+Greedy (v/w oranı),-193.0,3.375,-189.625,193.0,-3.0,✅
+Hibrit QAOA p=1 (⟨H⟩=-2.000),-193.0,3.375,-189.625,193.0,-3.0,✅
+Hibrit QAOA p=2 (⟨H⟩=-2.000),-193.0,3.375,-189.625,193.0,-3.0,✅
+Hibrit QAOA p=3 (⟨H⟩=-2.000),-193.0,3.375,-189.625,193.0,-3.0,✅
