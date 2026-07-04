@@ -1,0 +1,3 @@
+Domain,Uses arrival_exposure_rank,Uses route_features directly,Feature summary
+grocery,False,False,uses demand/distance criticality and distance_rank; no direct exposure feature
+cold_chain,True,True,uses arrival_exposure_rank in perishability and load_penalty

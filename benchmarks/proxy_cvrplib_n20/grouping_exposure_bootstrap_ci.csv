@@ -1,0 +1,5 @@
+Domain,n,Observed r,Observed p-value,Bootstrap CI low,Bootstrap CI high,Valid bootstrap samples,CI contains zero,Interpretation
+atm,20,-0.11144675480765329,0.6399455758884649,-0.5002119768297301,0.21957731764733313,1000,True,correlation not distinguishable from zero
+cargo,20,-0.13280934091605234,0.5767212211905526,-0.5050578252311572,0.18295444295284716,1000,True,correlation not distinguishable from zero
+cold_chain,20,-0.23644523830560646,0.31554542069986513,-0.6136316644939274,0.1387402341131911,1000,True,correlation not distinguishable from zero
+grocery,20,-0.2200768221793765,0.3511597002538002,-0.5774806943272202,0.05113252415606508,1000,True,correlation not distinguishable from zero

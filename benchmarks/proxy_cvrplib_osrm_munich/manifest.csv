@@ -1,0 +1,5 @@
+name,nodes,customers,capacity,edge_weight_type,distance_matrix_source,proxy_feature_source,best_known_cost,history_rows,scenario_count,mean_nominal_demand,mean_proxy_demand,scenario_mean
+A-n32-k5,32,31,100,EUC_2D,osrm:driving:duration_minutes:scale-to-bbox:https://router.project-osrm.org,cvrplib,784,365,200,13.225806451612904,14.071675767117968,13.40966317324624
+B-n31-k5,31,30,100,EUC_2D,osrm:driving:duration_minutes:scale-to-bbox:https://router.project-osrm.org,cvrplib,672,365,200,13.733333333333333,14.735244139635446,14.196811063671504
+E-n13-k4,13,12,6000,EXPLICIT,cvrplib:no_coordinates,cvrplib,247,365,200,1516.6666666666667,1604.2459243850476,1539.144713941282
+P-n19-k2,19,18,160,EUC_2D,osrm:driving:duration_minutes:scale-to-bbox:https://router.project-osrm.org,cvrplib,212,365,200,17.22222222222222,18.239468501720623,17.13960080367117

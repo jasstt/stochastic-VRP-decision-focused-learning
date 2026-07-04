@@ -20,6 +20,10 @@ class CVRPInstance:
     edge_weight_type: str
     best_known_cost: int | None
     source_path: str
+    distance_matrix_source: str = "cvrplib"
+    travel_time_seconds_matrix: np.ndarray | None = None
+    road_distance_meters_matrix: np.ndarray | None = None
+    osrm_coordinates: np.ndarray | None = None
 
     @property
     def n_nodes(self) -> int:
@@ -170,6 +174,9 @@ def customer_view(instance: CVRPInstance) -> tuple[np.ndarray, np.ndarray]:
 def load_instance_json(path: str | Path) -> CVRPInstance:
     payload = json.loads(Path(path).read_text(encoding="utf-8"))
     coords = payload.get("coordinates")
+    osrm_coords = payload.get("osrm_coordinates")
+    travel_time_seconds = payload.get("travel_time_seconds_matrix")
+    road_distance_meters = payload.get("road_distance_meters_matrix")
     return CVRPInstance(
         name=payload["name"],
         capacity=int(payload["capacity"]),
@@ -180,4 +187,12 @@ def load_instance_json(path: str | Path) -> CVRPInstance:
         edge_weight_type=payload["edge_weight_type"],
         best_known_cost=payload.get("best_known_cost"),
         source_path=payload.get("source_path", ""),
+        distance_matrix_source=payload.get("distance_matrix_source", "cvrplib"),
+        travel_time_seconds_matrix=(
+            None if travel_time_seconds is None else np.asarray(travel_time_seconds, dtype=float)
+        ),
+        road_distance_meters_matrix=(
+            None if road_distance_meters is None else np.asarray(road_distance_meters, dtype=float)
+        ),
+        osrm_coordinates=None if osrm_coords is None else np.asarray(osrm_coords, dtype=float),
     )

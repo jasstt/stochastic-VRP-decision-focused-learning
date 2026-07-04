@@ -1,0 +1,5 @@
+instance,best_cost_method,best_cost,stockout_rate,route_cost,planned_load_total,best_stockout_method,best_stockout,mean_total_cost
+A-n32-k5,stoch_lp_on_proxy_mean_routes,480.9243717580866,0.2316129032258064,389.0,499.99999980000007,quantile_p75_scaled_or_tools,0.2248387096774193,513.6503027494622
+B-n31-k5,stoch_lp_on_proxy_mean_routes,459.8316032124336,0.2881666666666667,340.0,484.1359483999999,robust_mean_1std_scaled_or_tools,0.2625,460.1679457705572
+E-n13-k4,quantile_p75_or_tools,3521.6182197373446,0.19375,291.0,22399.18474125652,quantile_p75_or_tools,0.19375,3521.6182197373446
+P-n19-k2,stoch_lp_on_nominal_routes,353.1037441528262,0.3836111111111111,254.0,319.9999983,stoch_lp_on_nominal_routes,0.3836111111111111,353.1037441528262

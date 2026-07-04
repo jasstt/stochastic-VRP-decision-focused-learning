@@ -1,0 +1,5 @@
+Instance,Grouping Divergence,Ordering Divergence
+A-n32-k5,0.0,0.625
+B-n31-k5,0.6752136752136753,0.10526315789473684
+E-n13-k4,0.8095238095238095,0.5
+P-n19-k2,0.0,0.5
