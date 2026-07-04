@@ -1,0 +1,5 @@
+instance,domain,method,mean_total_cost,stockout_rate,planned_load_total,anchor_method
+A-n32-k5,grocery,grocery_engine_on_proxy_mean_or_tools,900.040710291749,0.34,461.5805965,proxy_mean_or_tools
+B-n31-k5,cargo,cargo_engine_on_proxy_mean_or_tools,792.6076878154837,0.2728333333333333,496.4186599000001,proxy_mean_or_tools
+E-n13-k4,cargo,cargo_engine_on_proxy_mean_or_tools,3783.210025942544,0.2241666666666666,23310.8411,proxy_mean_or_tools
+P-n19-k2,grocery,grocery_engine_on_nominal_or_tools,292.1902089662144,0.3966666666666666,320.00000029999995,nominal_or_tools
