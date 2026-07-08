@@ -1,0 +1,3 @@
+Comparison,Instances,Rows,Both_Feasible,Metric_Safe_Rows,Safe_Rows,Max_Stockout_Rel_Drift,Max_Cost_Rel_Drift,Mean_Stockout_Rel_Drift,Mean_Cost_Rel_Drift,Metric Safe Share,Safe Share,Ranking_Flip_Instances
+provider_switch,20,80,80,69,36,0.1742243436754178,0.08489006678589206,0.022615286457805774,0.01610862692328626,0.8625,0.45,11
+scenario_reduction_limit_60,9,36,36,36,4,0.01879015638259185,0.0021376746111204546,0.0067072299510236065,0.0006040595141725713,1.0,0.1111111111111111,8

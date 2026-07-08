@@ -118,6 +118,24 @@ Rule: `--lp-planning-scenario-limit 60` is acceptable for exploration, debug,
 and hypothesis-screening runs. Final README/report numbers and decision-driving
 comparisons should be confirmed with full planning history.
 
+Run the sector stability tolerance judge:
+
+```bash
+python -m benchmark_proxy_vrp.analyze_sector_stability_tolerance
+```
+
+Tolerance rule: a domain row is `safe` only when both profiles are feasible,
+stockout relative drift is at most 5%, `mean_total_cost` relative drift is at
+most 5%, and the instance-level domain stockout ranking does not flip. Any
+failure means the row needs full-scenario confirmation before it is used for a
+decision-driving README/report claim. Additional perturbation runs can be scored
+with:
+
+```bash
+python -m benchmark_proxy_vrp.analyze_sector_stability_tolerance \
+  --comparison perturb_1pct,base,base.csv,jittered,jittered.csv
+```
+
 Benchmark LP backends and scenario reduction:
 
 ```bash
