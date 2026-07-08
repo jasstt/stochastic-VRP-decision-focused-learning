@@ -53,10 +53,55 @@ X_SELECTION_V3 = [
 ]
 
 
+X_SELECTION_V4 = [
+    XSelection("X-n101-k25", "x100_143", "Small X baseline; many vehicles relative to size."),
+    XSelection("X-n106-k14", "x100_143", "Small X case with moderate fleet count."),
+    XSelection("X-n110-k13", "x100_143", "Small X case with tight capacity and lower vehicle count."),
+    XSelection("X-n115-k10", "x100_143", "Small X case with lower vehicle count."),
+    XSelection("X-n120-k6", "x100_143", "Small X case with very low fleet count."),
+    XSelection("X-n125-k30", "x100_143", "Small X case with high route count."),
+    XSelection("X-n129-k18", "x100_143", "Small X boundary case."),
+    XSelection("X-n134-k13", "x100_143", "Additional small X case from v3."),
+    XSelection("X-n139-k10", "x100_143", "New small X case for v4 density."),
+    XSelection("X-n143-k7", "x100_143", "Upper edge of the first X-size band."),
+    XSelection("X-n148-k46", "x148_190", "High-vehicle case at the start of the second band."),
+    XSelection("X-n153-k22", "x148_190", "Medium X entry point after the small bucket."),
+    XSelection("X-n157-k13", "x148_190", "Medium case with small capacity and lower fleet count."),
+    XSelection("X-n162-k11", "x148_190", "Medium case with high capacity and lower route count."),
+    XSelection("X-n167-k10", "x148_190", "Medium case with low vehicle count."),
+    XSelection("X-n172-k51", "x148_190", "Medium case with many active routes."),
+    XSelection("X-n176-k26", "x148_190", "Medium case with moderate-high route count."),
+    XSelection("X-n181-k23", "x148_190", "Medium boundary case."),
+    XSelection("X-n186-k15", "x148_190", "New medium case for v4 density."),
+    XSelection("X-n190-k8", "x148_190", "Upper edge of the second X-size band."),
+    XSelection("X-n195-k51", "x195_237", "High-route case at the start of the third band."),
+    XSelection("X-n200-k36", "x195_237", "Third-band case with moderate-high route count."),
+    XSelection("X-n204-k19", "x195_237", "Third-band case with moderate route count."),
+    XSelection("X-n209-k16", "x195_237", "Third-band case with lower route count."),
+    XSelection("X-n214-k11", "x195_237", "Third-band low-route case."),
+    XSelection("X-n219-k73", "x195_237", "Third-band high-route stress case."),
+    XSelection("X-n223-k34", "x195_237", "Large X case kept below 250 nodes for executable diagnostics."),
+    XSelection("X-n228-k23", "x195_237", "Large case with moderate fleet count."),
+    XSelection("X-n233-k16", "x195_237", "Large case with lower route count."),
+    XSelection("X-n237-k14", "x195_237", "Upper edge of the third X-size band."),
+    XSelection("X-n242-k48", "x242_284", "Fourth-band case with high route count."),
+    XSelection("X-n247-k50", "x242_284", "Fourth-band case with high route count."),
+    XSelection("X-n251-k28", "x242_284", "Fourth-band case around 250 nodes."),
+    XSelection("X-n256-k16", "x242_284", "Fourth-band lower-route case."),
+    XSelection("X-n261-k13", "x242_284", "Fourth-band low-route case."),
+    XSelection("X-n266-k58", "x242_284", "Fourth-band high-route stress case."),
+    XSelection("X-n270-k35", "x242_284", "Fourth-band moderate-high route case."),
+    XSelection("X-n275-k28", "x242_284", "Fourth-band moderate route case."),
+    XSelection("X-n280-k17", "x242_284", "Fourth-band lower-route case."),
+    XSelection("X-n284-k15", "x242_284", "Upper edge of the executable v4 set."),
+]
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Download and validate a stratified executable CVRPLIB X dataset.")
     parser.add_argument("--out-dir", default="benchmarks/cvrplib/raw_x_v3")
     parser.add_argument("--selection-output", default="instance_selection_v3.md")
+    parser.add_argument("--selection", choices=["v3", "v4"], default="v3")
     args = parser.parse_args()
 
     out_dir = Path(args.out_dir)
@@ -64,7 +109,8 @@ def main() -> None:
 
     name_to_id = _cvrplib_x_instance_ids()
     rows = []
-    for selected in X_SELECTION_V3:
+    selected_instances = X_SELECTION_V4 if args.selection == "v4" else X_SELECTION_V3
+    for selected in selected_instances:
         if selected.name not in name_to_id:
             raise ValueError(f"{selected.name} was not found on CVRPLIB instance index")
         cvrplib_id = name_to_id[selected.name]

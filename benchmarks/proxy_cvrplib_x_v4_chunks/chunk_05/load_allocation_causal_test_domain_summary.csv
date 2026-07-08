@@ -1,0 +1,17 @@
+Domain,Scenario,Scenario Type,Rows,Feasible Rows,Informative Rows,Mean Stockout,Allocation Source Closer Share,Route Source Closer Share,Mean Movement Fraction to Allocation
+atm,OR-Tools route + OR-Tools allocation,baseline,2,2,2,0.4165120547555892,1.0,1.0,
+atm,OR-Tools route + VROOM allocation,intervention,2,2,2,0.4165120547555892,0.0,1.0,0.0
+atm,VROOM route + VROOM allocation,baseline,2,2,2,0.4286897262220538,1.0,1.0,
+atm,VROOM route + OR-Tools allocation,intervention,2,2,2,0.4286897262220538,0.0,1.0,0.0
+grocery,OR-Tools route + OR-Tools allocation,baseline,2,2,2,0.4156971153846154,1.0,1.0,
+grocery,OR-Tools route + VROOM allocation,intervention,2,2,2,0.4231917866616143,0.5,0.5,0.539951878187173
+grocery,VROOM route + VROOM allocation,baseline,2,2,2,0.4297770225464191,1.0,1.0,
+grocery,VROOM route + OR-Tools allocation,intervention,2,2,2,0.42801546513830996,0.0,1.0,0.1279178338001863
+cargo,OR-Tools route + OR-Tools allocation,baseline,2,2,2,0.4141442070860174,1.0,1.0,
+cargo,OR-Tools route + VROOM allocation,intervention,2,2,2,0.4141442070860174,0.0,1.0,0.0
+cargo,VROOM route + VROOM allocation,baseline,2,2,2,0.426923432171277,1.0,1.0,
+cargo,VROOM route + OR-Tools allocation,intervention,2,2,2,0.42702195433876466,0.0,1.0,-0.008771929824563485
+cold_chain,OR-Tools route + OR-Tools allocation,baseline,2,2,2,0.41241320102311485,1.0,1.0,
+cold_chain,OR-Tools route + VROOM allocation,intervention,2,2,2,0.4228214996210686,1.0,0.0,0.7826297549527905
+cold_chain,VROOM route + VROOM allocation,baseline,2,2,2,0.4256389730958696,1.0,1.0,
+cold_chain,VROOM route + OR-Tools allocation,intervention,2,2,2,0.4231761557408109,0.0,1.0,0.18469273590569268

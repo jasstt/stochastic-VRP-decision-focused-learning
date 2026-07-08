@@ -27,6 +27,7 @@ class FixedRouteProblem:
     evaluation_scenarios: np.ndarray
     route_cost: float
     objective: DomainObjective
+    route_load_targets: list[float] | None = None
 
     @property
     def n_customers(self) -> int:
@@ -101,6 +102,11 @@ class StochasticDecisionEngine:
                 pulp.lpSum(load[i] for i in cols) <= float(problem.route_capacity),
                 f"route_capacity_{route_id}",
             )
+            if problem.route_load_targets is not None:
+                prob += (
+                    pulp.lpSum(load[i] for i in cols) == float(problem.route_load_targets[route_id]),
+                    f"route_load_target_{route_id}",
+                )
 
         for i in range(n_customers):
             for s in range(n_scenarios):
@@ -171,6 +177,14 @@ def _validate_problem(problem: FixedRouteProblem) -> None:
     covered = sorted(col for group in problem.route_groups for col in group)
     if covered != list(range(n_customers)):
         raise ValueError("Route groups must cover each customer exactly once")
+    if problem.route_load_targets is not None:
+        if len(problem.route_load_targets) != len(problem.route_groups):
+            raise ValueError("route_load_targets length must match route_groups")
+        for target in problem.route_load_targets:
+            if target < -1e-9:
+                raise ValueError("route_load_targets cannot contain negative values")
+            if target > float(problem.route_capacity) + 1e-9:
+                raise ValueError("route_load_targets cannot exceed route_capacity")
     if not (0.0 < problem.objective.cvar_alpha < 1.0):
         raise ValueError("cvar_alpha must be in (0, 1)")
 

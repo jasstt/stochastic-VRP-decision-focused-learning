@@ -1,0 +1,5 @@
+Scenario,Scenario Type,Rows,Feasible Rows,Informative Rows,Mean Stockout,Mean Abs Distance to OR-Tools,Mean Abs Distance to VROOM,OR-Tools Closer Share,VROOM Closer Share,Allocation Source Closer Share,Route Source Closer Share,Mean Movement Fraction to Allocation
+OR-Tools route + OR-Tools allocation,baseline,8,8,8,0.3602975096958563,0.0,0.000873137374974492,1.0,0.0,1.0,1.0,
+OR-Tools route + VROOM allocation,intervention,8,8,8,0.3602975096958563,0.0,0.000873137374974492,1.0,0.0,0.0,1.0,0.0
+VROOM route + VROOM allocation,baseline,8,8,8,0.3606468156766687,0.000873137374974492,0.0,0.0,1.0,1.0,1.0,
+VROOM route + OR-Tools allocation,intervention,8,8,8,0.3606468156766687,0.000873137374974492,0.0,0.0,1.0,0.0,1.0,0.0

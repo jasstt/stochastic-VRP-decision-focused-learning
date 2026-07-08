@@ -1,0 +1,5 @@
+Instance,Customers,OR-Tools Anchor Feasible,VROOM Anchor Feasible,Common Anchor Feasible,OR-Tools Route Count,VROOM Route Count,Same Route Count
+X-n251-k28,250,True,True,True,28,28,True
+X-n256-k16,255,False,False,False,0,0,False
+X-n261-k13,260,True,True,True,13,13,True
+X-n266-k58,265,False,False,False,0,0,False

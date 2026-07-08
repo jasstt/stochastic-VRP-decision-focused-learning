@@ -145,10 +145,14 @@ Olası diğer adaylar:
 
 - Route capacity utilization farkı: motorlar kapasiteyi farklı yoğunlukta dolduruyor olabilir. `stockout_mechanism_diagnosis_report.md` içinde n=20 üzerinde test edildi; mean utilization farkı tüm domainlerde tek x seviyesine düştüğü için A.5'e göre korelasyon raporlanamadı ve açıklayıcı mekanizma olarak desteklenmedi.
 - Vehicle count veya aktif rota sayısı farkı: bir motor aynı instance için farklı sayıda etkin rota kullanıyor olabilir. Aynı raporda test edildi; OR-Tools ve VROOM 20/20 instance'ta aynı aktif araç sayısını kullandı, bu nedenle x-varyasyonu oluşmadı ve bu aday da stockout sıralama değişimini açıklamadı.
-- Route-level load allocation farkı: aynı toplam yük, farklı route risk profillerine dağılıyor olabilir. `load_allocation_diagnosis_report.md` içinde X24 setinin ortak feasible n=16 alt kümesinde test edildi. Gini farkı tüm domainlerde pozitif aday sinyal verdi: r aralığı 0.8213-0.9023, p<=9.6e-5, bootstrap CI sıfırı dışladı. Load variance farkı daha da güçlüydü: r aralığı 0.8555-0.9121, p<=2.4e-5, bootstrap CI sıfırı dışladı. `X-n115-k10` bazı variance modellerinde yüksek Cook's Distance verdi; leave-one-out sonrası atm, cold_chain ve grocery için sinyal ayakta kaldı.
+- Route-level load allocation farkı: aynı toplam yük, farklı route risk profillerine dağılıyor olabilir. `load_allocation_diagnosis_report.md` içinde X24 setinin ortak feasible n=16 alt kümesinde test edildi. Gini farkı tüm domainlerde pozitif aday sinyal verdi: r aralığı 0.8213-0.9023, p<=9.6e-5, bootstrap CI sıfırı dışladı. Load variance farkı daha da güçlüydü: r aralığı 0.8555-0.9121, p<=2.4e-5, bootstrap CI sıfırı dışladı. Ancak bu daha sonra `load_allocation_causal_test_report.md` içinde müdahale testiyle sınandı ve tek başına nedensel mekanizma olarak doğrulanmadı.
 - Objective interaction farkı: domain objective'leri aynı feature'ları farklı ağırlıklarla kullandığı için stockout dışındaki maliyet bileşenleri ana sinyali taşıyor olabilir.
 
-Objective interaction daha sonra `objective_interaction_diagnosis_report.md` içinde test edildi. Ham korelasyonlarda bazı objective bileşenleri stockout farkıyla ilişkili görünse de, `Load Variance Diff` kontrol edilince bağımsız aday sinyal büyük ölçüde kayboldu. Bu nedenle A.8 için şu anki en güçlü ölçülen mekanizma route-level load allocation'dır. Ancak nihai neden olarak tamamen kapatılmamalıdır; çünkü X24 koşusunda OR-Tools sadece 16/24 instance'ta anchor-feasible oldu ve daha büyük/denge kontrollü bir X seti gerekir.
+Objective interaction daha sonra `objective_interaction_diagnosis_report.md` içinde test edildi. Ham korelasyonlarda bazı objective bileşenleri stockout farkıyla ilişkili görünse de, `Load Variance Diff` kontrol edilince bağımsız aday sinyal büyük ölçüde kayboldu.
+
+Load allocation son olarak X40 setinde müdahale testiyle sınandı. Bu testte 40 instance'ın 27'si common anchor-feasible kaldı ve route count eşleşti. Hibritler allocation kaynağına değil çoğunlukla route kaynağına yakın kaldı: `OR-Tools route + VROOM allocation` satırlarında allocation-source closer share 0.2184, route-source closer share 0.7816; `VROOM route + OR-Tools allocation` satırlarında allocation-source closer share 0.1379, route-source closer share 0.8621. Bu nedenle A.8 artık "load allocation tek başına kök neden" diye kapatılamaz.
+
+Bu noktada A.8'in doğru durumu: stockout sıralama farkının kök nedeni hâlâ açık, fakat arama alanı daraldı. Sıradaki aday route topology'nin daha ince özellikleridir: route uzunluğu dağılımı, route içi yüksek-demand müşteri konumu, marginal capacity slack ve solver heuristic farkları.
 
 ## A.9 İlişkili Hipotezleri Ayrı Test Etmenin Riski
 
@@ -185,3 +189,29 @@ linear models of more than 2000 rows or columns
 ```
 
 Bu nedenle mevcut ortamda GAMS backend'i proje LP'lerini hızlandırmaz; çünkü model solve edilmeden lisans limitine takılır. GAMS ancak non-demo lisans ve güçlü LP solver'larla, özellikle scenario count 200+ seviyesine çıktığında anlamlı bir hızlandırıcı olabilir.
+
+## A.12 Load Allocation Müdahale Testi
+
+`load_allocation_causal_test_report.md`, load allocation hipotezini korelasyondan müdahaleye taşıdı.
+
+Deney tasarımı:
+
+- OR-Tools route grupları sabit tutuldu, VROOM baseline route-level planlanan yük toplamları OR-Tools route'larına zorlandı.
+- VROOM route grupları sabit tutuldu, OR-Tools baseline route-level planlanan yük toplamları VROOM route'larına zorlandı.
+- Route etiketleri motorlar arasında anlamsız olduğu için allocation vektörleri büyükten küçüğe sıralanarak eşlendi.
+- Aktif route sayısı farklı olan durumlar elendi; X40 koşusunda common-feasible 27 instance'ın tamamında route count eşitti.
+
+Sonuç:
+
+| Müdahale | Feasible satır | Allocation-source closer share | Route-source closer share |
+|---|---:|---:|---:|
+| OR-Tools route + VROOM allocation | 87/108 | 0.2184 | 0.7816 |
+| VROOM route + OR-Tools allocation | 87/108 | 0.1379 | 0.8621 |
+
+Doğru cümle:
+
+> Load allocation, X24 üzerinde güçlü korelasyonel adaydı; fakat X40 müdahale testinde tek başına nedensel mekanizma olarak doğrulanmadı. Hibrit stockout sonuçları çoğunlukla allocation kaynağına değil route kaynağına yakın kaldı.
+
+Henüz doğru olmayan cümle:
+
+> Stockout sıralamasındaki motor farkının kök nedeni route-level load allocation'dır.
