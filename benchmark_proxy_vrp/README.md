@@ -128,6 +128,26 @@ python -m benchmark_proxy_vrp.benchmark_lp_backends \
   --lp-planning-scenario-limit 60
 ```
 
+Run a solver robustness sweep across route providers, LP backends, time limits,
+and scenario limits:
+
+```bash
+python -m benchmark_proxy_vrp.benchmark_solver_robustness \
+  --data-dir benchmarks/proxy_cvrplib \
+  --out-dir benchmarks/solver_robustness_benchmark_smoke \
+  --max-instances 2 \
+  --domains atm cold_chain \
+  --routing-providers ortools vroom \
+  --route-time-limits 2 \
+  --lp-backends pulp_cbc ortools_glop ortools_pdlp \
+  --lp-time-limits 10 \
+  --lp-scenario-limits full 60
+```
+
+The configured baseline is OR-Tools + CBC + full planning history at the
+largest supplied route/LP time limits. VROOM rows are reported as provider
+failures if the local VROOM service is not reachable.
+
 Run the same engine through VROOM in custom-matrix mode:
 
 ```bash

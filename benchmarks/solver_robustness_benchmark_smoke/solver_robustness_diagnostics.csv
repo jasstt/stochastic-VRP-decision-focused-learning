@@ -1,0 +1,7 @@
+X Metric,Y Metric,N,Unique X Levels,Pearson r,Permutation p-value,Bootstrap CI Low,Bootstrap CI High,A5 Status
+Route Time Limit Sec,Stockout Drift Abs,21,1,,,,,insufficient x variation; correlation not reported
+LP Time Limit Sec,Stockout Drift Abs,21,1,,,,,insufficient x variation; correlation not reported
+LP Planning Scenarios,Stockout Drift Abs,21,2,,,,,insufficient x variation; correlation not reported
+Route Time Limit Sec,Objective Drift Rel,21,1,,,,,insufficient x variation; correlation not reported
+LP Time Limit Sec,Objective Drift Rel,21,1,,,,,insufficient x variation; correlation not reported
+LP Planning Scenarios,Objective Drift Rel,21,2,,,,,insufficient x variation; correlation not reported
