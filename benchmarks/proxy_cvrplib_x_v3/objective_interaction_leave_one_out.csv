@@ -1,0 +1,13 @@
+Domain,Predictor,n,Unique x Levels,Pearson r,p-value,Bootstrap CI Low,Bootstrap CI High,CI Contains Zero,Evidence Label,Dropped Instance
+atm,Mean Domain Loss Diff,15,15,0.44430366434026847,0.0970707674953964,0.33058447581390243,0.9716149047445585,False,directional_signal_ci_excludes_zero_but_p_ge_0_05,X-n162-k11
+atm,Mean Shortfall Diff,15,15,0.4262316110718514,0.1131375797491356,0.30306309485648786,0.9723493615335183,False,directional_signal_ci_excludes_zero_but_p_ge_0_05,X-n162-k11
+atm,Planned Load Total Diff,15,15,-0.4708120077619497,0.07650802599802922,-0.8958242933742491,0.037879278732973455,True,no_correlation_ci_crosses_zero,X-n106-k14
+cargo,Mean Domain Loss Diff,15,15,0.4094335905194074,0.12964154490008317,0.3075541451419234,0.8999890375197632,False,directional_signal_ci_excludes_zero_but_p_ge_0_05,X-n162-k11
+cargo,Mean Shortfall Diff,15,15,0.3828554039860552,0.15898117829709457,0.24826374220235978,0.9044404703981195,False,directional_signal_ci_excludes_zero_but_p_ge_0_05,X-n162-k11
+cargo,Mean Surplus Diff,15,15,-0.23455635679956452,0.4000929308997382,-0.7689402102057343,0.7700622378335128,True,no_correlation_ci_crosses_zero,X-n162-k11
+cargo,Planned Load Total Diff,15,15,-0.4056329369978472,0.1335916043136295,-0.8367083877826689,0.5856667323472079,True,no_correlation_ci_crosses_zero,X-n106-k14
+cold_chain,Mean Domain Loss Diff,15,15,0.6666559367389697,0.006642636439280482,0.3109214083249844,0.9271608512987821,False,candidate_mechanism,X-n162-k11
+cold_chain,Mean Shortfall Diff,15,15,0.4944230368601544,0.06099994061013332,0.39970288075674293,0.9899986918636828,False,directional_signal_ci_excludes_zero_but_p_ge_0_05,X-n162-k11
+grocery,Mean Domain Loss Diff,15,15,0.5647266765478239,0.028281706751735466,0.46416051073172104,0.973911555586916,False,candidate_mechanism,X-n162-k11
+grocery,Mean Shortfall Diff,15,15,0.4749476992311157,0.07360703509196663,0.385070084588375,0.9835780587825771,False,directional_signal_ci_excludes_zero_but_p_ge_0_05,X-n162-k11
+grocery,Mean Surplus Diff,15,15,-0.5467751823065764,0.03492778307654093,-0.9451373784321369,-0.4355836793460367,False,candidate_mechanism,X-n106-k14

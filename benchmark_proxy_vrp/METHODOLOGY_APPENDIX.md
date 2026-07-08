@@ -4,13 +4,18 @@
 
 Bu ek, projenin kendi ürettiği bulguları nasıl denetlediğini gösteren bir vaka analizidir. Amaç sonucu gizlemek değil, doğrulama sürecinin kendisini şeffaf kılmaktır.
 
-Doğrulama zinciri beş rapora dayanır:
+Doğrulama zinciri şu raporlara dayanır:
 
 - `vroom_comparison_report.md`: OR-Tools ve VROOM ile ilk solver-agnostiklik testi.
 - `route_grouping_sensitivity_report.md`: n=4 route grouping tanı sinyali.
 - `ordering_vs_grouping_divergence_report.md`: grouping ve ordering etkilerinin ayrıştırılması.
 - `grouping_exposure_validation_n20_report.md`: n=20 doğrulama denemesi.
 - `false_positive_mechanism_report.md`: n=4 sinyalinin neden yanıltıcı göründüğünün mekanizma analizi.
+- `stockout_mechanism_diagnosis_report.md`: A.8'de açık kalan stockout mekanizması için capacity-utilization ve active-vehicle-count tanı testi.
+- `x_dataset_expansion_report.md`: CVRPLIB X setinden gerçekten indirilen ve çalıştırılan 24 instance genişlemesi.
+- `load_allocation_diagnosis_report.md`: route-level load allocation farkının stockout farkını açıklayıp açıklamadığına dair X-set tanısı.
+- `objective_interaction_diagnosis_report.md`: objective bileşen farklarının stockout farkını load allocation'dan bağımsız açıklayıp açıklamadığı.
+- `gams_lp_backend_probe_report.md`: GAMS MCP backend'inin mevcut lisansla X ölçeğindeki LP'leri hızlandırıp hızlandıramayacağı.
 
 Bu ek, dağınık görünen bu raporları tek bir metodolojik anlatıya bağlar.
 
@@ -111,7 +116,7 @@ Bu kural sadece route grouping analizi için değil, tüm benchmark bulguları i
 |---|---|---|
 | OSRM 3-bbox testi | 4 instance x 3 şehir | Sinyal var, kanıt değil. Rapor bunu "tekrarlanabilir erken sinyal" olarak işaretledi. |
 | Domain adapter sıralaması (`cargo < atm < ...`) | 4 instance | Yön sinyali var, istatistiksel güç yok. Domain genellemesi için n>=20 gerekir. |
-| Solver-agnostiklik | 4 -> 20 instance | Ana interface/feasibility iddiası ayakta; ikincil mekanizma hipotezi n=20 ile düzeltildi. |
+| Solver-agnostiklik | 4 -> 20 -> X24 instance | Interface iddiası ayakta; feasibility iddiası X setinde sınırlı. VROOM 21/24, OR-Tools 16/24 anchor-feasible oldu. |
 | VRP kuantum QAOA sonuçları | n=1 veya tek problem boyutu | Ayrı bir çalışma; aynı ilke geçerli. Bu sonuçlar ölçek kanıtı değil, demo/tanı sonucu olarak okunmalı. |
 
 ## A.7 Hangi İddia Ayakta, Hangisi Çöktü
@@ -121,26 +126,62 @@ Bu doğrulama zincirinde çöken şey ana solver-agnostiklik iddiası değildir.
 | İddia | Durum | Kanıt |
 |---|---|---|
 | Domain'lerin bağıl maliyet sıralaması motor-bağımsız | AYAKTA | 32 domain-engine run kapsandı; provider-level ortalamalarda cold_chain her iki motorda en pahalı, cargo her iki motorda en ucuz domain kaldı. |
-| Feasibility motor-bağımsız | AYAKTA | OR-Tools ve VROOM aynı 16 instance-domain koşulunda feasible oldu; 32/32 run tamamlandı, feasibility mismatch görülmedi. |
+| Feasibility motor-bağımsız | KISITLI | İlk küçük koşuda mismatch görülmedi; X24 koşusunda VROOM 21/24, OR-Tools 16/24 anchor-feasible oldu. Bu, interface'in çalıştığını ama zor X instance'larında solver/time-limit feasibility eşdeğerliği iddiasının genellenemeyeceğini gösterir. |
 | Stockout sıralaması motor-bağımsız | KISMEN AYAKTA | Stockout değerleri benzer bantta kaldı, fakat bağıl sıralama değişti: OR-Tools `cold_chain > grocery > cargo > atm`, VROOM `grocery > cold_chain > atm > cargo`. |
 | Grouping/ordering divergence stockout farkını açıklıyor | ÇÖKTÜ | n=20'de korelasyon sıfıra yaklaştı, yön korunmadı, bootstrap CI sıfırı kapsadı. |
 | `E-n13-k4` kaynaklı sahte korelasyon | KANITLANDI | Cook's Distance 24.12; n20 remainder testinde r yaklaşık 0 ve p>0.5. |
 
-Ana solver-agnostiklik iddiası, yani stochastic decision layer'ın OR-Tools ve VROOM provider interface'leri üzerinden çalışması, feasibility kapsamının eşleşmesi ve domain-level maliyet sıralamasının korunması ayakta kalmıştır. Daha büyük örneklemle sarsılan iddia, bu motor-bağımsızlığın altındaki stockout mekanizmasını route grouping veya ordering divergence ile açıklama girişimiydi.
+Ana solver-agnostiklik iddiasının interface kısmı, yani stochastic decision layer'ın OR-Tools ve VROOM provider interface'leri üzerinden çalışması, ayakta kalmıştır. Ancak X24 koşusu feasibility eşdeğerliği iddiasını daraltmıştır: zor ve yüksek capacity-pressure X instance'larında VROOM daha fazla anchor route bulmuştur. Domain-level maliyet sıralaması ortak feasible sette yine korunmuştur; daha büyük örneklemle değişen kısım, hem feasibility kapsamı hem de stockout mekanizmasının açıklamasıdır.
 
 Sonuç cümlesi:
 
-> Ana solver-agnostiklik iddiası (domain sıralaması ve feasibility motor-bağımsız) ayakta kalmıştır ve daha büyük örneklemle sarsılmamıştır. Çöken iddia, bu motor-bağımsızlığın altındaki mekanizmayı açıklamaya çalışan ikincil bir hipotezdi. Bu ayrım önemlidir: asıl bulgu hâlâ geçerli, sadece "neden" sorusunun cevabı hâlâ açık kalmıştır.
+> Solver-agnostic interface iddiası ayaktadır ve domain maliyet sıralaması ortak feasible sette korunmuştur. Ancak feasibility eşdeğerliği X24 üzerinde sınırlıdır; bu yüzden "motor değişse de her instance aynı şekilde feasible olur" cümlesi artık doğru değildir.
 
 ## A.8 Açık Kalan Soru
 
-Stockout sıralamasının motora göre değişmesinin gerçek nedeni hâlâ bilinmiyor. Grouping divergence, ordering divergence ve grouping-exposure farkı bunu n=20 üzerinde açıklamadı.
+Stockout sıralamasının motora göre değişmesinin gerçek nedeni artık kısmen daraltılmıştır. Grouping divergence, ordering divergence ve grouping-exposure farkı bunu n=20 üzerinde açıklamadı. Capacity utilization ve vehicle count farkı da açıklamadı. X24 genişlemesinden gelen ortak feasible n=16 analizinde ise route-level load allocation güçlü bir aday mekanizma verdi.
 
 Olası diğer adaylar:
 
-- Route capacity utilization farkı: motorlar kapasiteyi farklı yoğunlukta dolduruyor olabilir.
-- Vehicle count veya aktif rota sayısı farkı: bir motor aynı instance için farklı sayıda etkin rota kullanıyor olabilir.
-- Route-level load allocation farkı: aynı toplam yük, farklı route risk profillerine dağılıyor olabilir.
+- Route capacity utilization farkı: motorlar kapasiteyi farklı yoğunlukta dolduruyor olabilir. `stockout_mechanism_diagnosis_report.md` içinde n=20 üzerinde test edildi; mean utilization farkı tüm domainlerde tek x seviyesine düştüğü için A.5'e göre korelasyon raporlanamadı ve açıklayıcı mekanizma olarak desteklenmedi.
+- Vehicle count veya aktif rota sayısı farkı: bir motor aynı instance için farklı sayıda etkin rota kullanıyor olabilir. Aynı raporda test edildi; OR-Tools ve VROOM 20/20 instance'ta aynı aktif araç sayısını kullandı, bu nedenle x-varyasyonu oluşmadı ve bu aday da stockout sıralama değişimini açıklamadı.
+- Route-level load allocation farkı: aynı toplam yük, farklı route risk profillerine dağılıyor olabilir. `load_allocation_diagnosis_report.md` içinde X24 setinin ortak feasible n=16 alt kümesinde test edildi. Gini farkı tüm domainlerde pozitif aday sinyal verdi: r aralığı 0.8213-0.9023, p<=9.6e-5, bootstrap CI sıfırı dışladı. Load variance farkı daha da güçlüydü: r aralığı 0.8555-0.9121, p<=2.4e-5, bootstrap CI sıfırı dışladı. `X-n115-k10` bazı variance modellerinde yüksek Cook's Distance verdi; leave-one-out sonrası atm, cold_chain ve grocery için sinyal ayakta kaldı.
 - Objective interaction farkı: domain objective'leri aynı feature'ları farklı ağırlıklarla kullandığı için stockout dışındaki maliyet bileşenleri ana sinyali taşıyor olabilir.
 
-Bu sorunun cevabı için ayrı bir tanı çalışması gerekir. Bu ek, stockout mekanizmasını kapatılmış bir sonuç olarak sunmaz; açık soru olarak bırakır.
+Objective interaction daha sonra `objective_interaction_diagnosis_report.md` içinde test edildi. Ham korelasyonlarda bazı objective bileşenleri stockout farkıyla ilişkili görünse de, `Load Variance Diff` kontrol edilince bağımsız aday sinyal büyük ölçüde kayboldu. Bu nedenle A.8 için şu anki en güçlü ölçülen mekanizma route-level load allocation'dır. Ancak nihai neden olarak tamamen kapatılmamalıdır; çünkü X24 koşusunda OR-Tools sadece 16/24 instance'ta anchor-feasible oldu ve daha büyük/denge kontrollü bir X seti gerekir.
+
+## A.9 İlişkili Hipotezleri Ayrı Test Etmenin Riski
+
+Capacity utilization ve vehicle count testleri metodolojik bir ders üretti. İlk bakışta iki ayrı hipotez gibi görünseler de bağımsız değiller:
+
+```text
+mean_utilization = total_route_load / (vehicle_capacity * active_vehicle_count)
+```
+
+Aynı instance'ta toplam talep aynıysa ve iki motor aynı sayıda aktif araç kullanıyorsa, instance-level mean utilization matematiksel olarak aynı kalır. Bu yüzden H1 (mean capacity utilization farkı) ve H2 (vehicle count farkı) ayrı ayrı test edildiğinde sahte bir kapsam hissi yaratabilir: iki hipotez koşulmuş gibi görünür, ama biri diğerinin sonucunu büyük ölçüde belirler.
+
+Bu ders sonraki tanılara uygulanmalıdır. İlişkili hipotezler önce bağımlılık grafiğine dökülmeli; sonra aynı matematiksel kaynağı tekrar ölçen metrikler yerine gerçekten yeni bilgi taşıyan metrikler seçilmelidir. Bu turda o yeni bilgi route-level load allocation idi: mean utilization aynı kalırken route yük dağılımı, Gini ve variance üzerinden değişti.
+
+## A.10 Objective Interaction Sonucu
+
+Objective interaction testinde şu predictor farkları incelendi: route cost, planned load total, mean domain loss, mean load penalty loss, mean surplus, mean shortfall ve mean total cost. Hedef değişken yine signed stockout diff idi.
+
+Ham korelasyonlarda cold-chain için `planned_load_total_diff` ve `mean_surplus_diff` aday sinyal verdi. Fakat route-level load allocation zaten güçlü bir mekanizma olduğu için, test ikinci aşamada `Load Variance Diff` kontrol edilerek tekrarlandı. Bu partial korelasyonlarda objective bileşenleri genel olarak bootstrap CI içinde sıfırı kapsadı; yani objective interaction, mevcut X24 ortak-feasible sette load allocation'dan bağımsız güçlü bir açıklama vermedi.
+
+Doğru cümle:
+
+> Objective interaction stockout farkıyla ilişkili olabilir, fakat mevcut X24 tanısında bağımsız ana mekanizma gibi görünmüyor. Ölçülen en güçlü mekanizma route-level load allocation farkıdır.
+
+Henüz doğru olmayan cümle:
+
+> Stockout sıralamasındaki motor farkı esas olarak domain objective ağırlıklarından kaynaklanır.
+
+## A.11 GAMS Backend Dersi
+
+GAMS MCP bağlantısı doğrulandı, ancak kurulu lisans GAMS Demo lisansıdır. X ölçeğine yakın sentetik bir LP probe'u `105 customer x 180 scenario` boyutunda 38,162 satır ve 38,267 sütun üretti. GAMS çözüm aşamasına geçmeden şu lisans limitiyle durdu:
+
+```text
+linear models of more than 2000 rows or columns
+```
+
+Bu nedenle mevcut ortamda GAMS backend'i proje LP'lerini hızlandırmaz; çünkü model solve edilmeden lisans limitine takılır. GAMS ancak non-demo lisans ve güçlü LP solver'larla, özellikle scenario count 200+ seviyesine çıktığında anlamlı bir hızlandırıcı olabilir.

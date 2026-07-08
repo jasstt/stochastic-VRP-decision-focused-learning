@@ -1,0 +1,4 @@
+Domain,Predictor,Dropped Instance,n,Unique x Levels,Pearson r,p-value,Bootstrap CI Low,Bootstrap CI High,CI Contains Zero,Evidence Label
+atm,Load Variance Diff,X-n115-k10,15,14,0.978438974933686,2.7526910427550886e-10,0.9485128150694301,0.994072586210793,False,candidate_mechanism
+cold_chain,Load Variance Diff,X-n115-k10,15,14,0.9639602493199182,7.495970527418106e-09,0.9107654944083997,0.9931305826277166,False,candidate_mechanism
+grocery,Load Variance Diff,X-n115-k10,15,14,0.973267474035871,1.0996679935154261e-09,0.9359151852635147,0.994904159357179,False,candidate_mechanism
