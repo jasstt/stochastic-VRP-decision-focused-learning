@@ -1,0 +1,4 @@
+Metric,n,Unique X Levels,Pearson r,p-value,Bootstrap CI Low,Bootstrap CI High,A.5 Interpretation
+Mean_Relative_Stockout_Diff,9,9,0.3542913215861968,0.35460482804232807,-0.24939874497115025,0.9451326229585528,diagnostic signal only: n<15
+Max_Relative_Stockout_Diff,9,9,0.3575636694688232,0.34065806878306876,-0.26564904660359895,0.9065394493179207,diagnostic signal only: n<15
+Mean_Abs_Stockout_Diff,9,9,0.37812862192203966,0.31764219576719577,-0.19196990244887768,0.9211531267300864,diagnostic signal only: n<15

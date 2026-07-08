@@ -93,6 +93,41 @@ python -m benchmark_proxy_vrp.run_domain_engine --routing-provider ortools --tim
 python -m benchmark_proxy_vrp.summarize_domain_results
 ```
 
+For fast diagnostic loops, keep routing unchanged but reduce only the LP
+planning scenarios with a deterministic total-demand-stratified subset:
+
+```bash
+python -m benchmark_proxy_vrp.run_domain_engine \
+  --routing-provider ortools \
+  --time-limit-sec 2 \
+  --lp-time-limit-sec 30 \
+  --lp-planning-scenario-limit 60
+```
+
+The full planning history should still be used for final report runs unless a
+scenario-reduction accuracy check is reported alongside the result.
+
+Current X40 bias check:
+
+- 9 OR-Tools-anchor-feasible X instances, balanced across small/medium/large.
+- 36 domain rows comparing full X40 planning history against `limit=60`.
+- Worst instance-level domain-max relative stockout drift: 1.88%.
+- Instances exceeding the 5% drift threshold: 0/9.
+
+Rule: `--lp-planning-scenario-limit 60` is acceptable for exploration, debug,
+and hypothesis-screening runs. Final README/report numbers and decision-driving
+comparisons should be confirmed with full planning history.
+
+Benchmark LP backends and scenario reduction:
+
+```bash
+python -m benchmark_proxy_vrp.benchmark_lp_backends \
+  --data-dir benchmarks/proxy_cvrplib \
+  --max-instances 1 \
+  --domains atm cold_chain \
+  --lp-planning-scenario-limit 60
+```
+
 Run the same engine through VROOM in custom-matrix mode:
 
 ```bash

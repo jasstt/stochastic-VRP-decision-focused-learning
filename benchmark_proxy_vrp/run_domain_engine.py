@@ -11,7 +11,8 @@ from .domain_adapters import available_adapters, get_adapter
 from .ortools_baselines import build_plans, vehicle_count_from_name
 from .routing_providers import OrToolsProvider, VroomProvider, instance_to_provider_inputs
 from .routing_providers.base import RouteSet
-from .stochastic_engine import StochasticDecisionEngine, evaluate_solution
+from .scenario_reduction import scenario_reduction_summary, select_representative_scenarios
+from .stochastic_engine import StochasticDecisionEngine, available_lp_backends, evaluate_solution
 
 
 def main() -> None:
@@ -25,9 +26,16 @@ def main() -> None:
     parser.add_argument("--output", default=None)
     parser.add_argument("--time-limit-sec", type=int, default=5)
     parser.add_argument("--lp-time-limit-sec", type=int, default=30)
+    parser.add_argument("--lp-backend", choices=available_lp_backends(), default="pulp_cbc")
+    parser.add_argument(
+        "--lp-planning-scenario-limit",
+        type=int,
+        default=None,
+        help="Use a deterministic total-demand-stratified subset for faster LP diagnostics.",
+    )
     args = parser.parse_args()
 
-    engine = StochasticDecisionEngine()
+    engine = StochasticDecisionEngine(lp_backend=args.lp_backend)
     data_dir = Path(args.data_dir)
     rows = []
     for instance_json in sorted(data_dir.glob("*/instance.json")):
@@ -35,6 +43,8 @@ def main() -> None:
         nominal, _ = customer_view(instance)
         instance_dir = instance_json.parent
         history = pd.read_csv(instance_dir / "proxy_demand_history.csv").drop(columns=["date"]).to_numpy()
+        lp_history = select_representative_scenarios(history, args.lp_planning_scenario_limit)
+        lp_scenario_summary = scenario_reduction_summary(history, lp_history)
         scenarios = np.load(instance_dir / "proxy_saa_scenarios.npy")
         node_meta = pd.read_csv(instance_dir / "proxy_node_meta.csv")
 
@@ -56,6 +66,8 @@ def main() -> None:
                     "method": "domain_engine",
                     "feasible": False,
                     "solver_name": anchor_solution.solver_name,
+                    "lp_backend": args.lp_backend,
+                    **lp_scenario_summary,
                     "reason": "no_feasible_anchor_route",
                 }
             )
@@ -66,7 +78,7 @@ def main() -> None:
             problem = adapter.build_problem(
                 instance=instance,
                 anchor_routes=anchor_solution,
-                planning_scenarios=history,
+                planning_scenarios=lp_history,
                 evaluation_scenarios=scenarios,
                 node_meta=node_meta,
             )
@@ -77,6 +89,8 @@ def main() -> None:
                 "method": solution.method,
                 "feasible": solution.feasible,
                 "solver_name": anchor_solution.solver_name,
+                "lp_backend": args.lp_backend,
+                **lp_scenario_summary,
                 "anchor_method": anchor_solution.raw_metadata.get("method", anchor_solution.solver_name),
                 "route_cost": anchor_solution.total_cost,
                 "planned_load_total": float(np.sum(solution.loads)) if solution.feasible else np.nan,

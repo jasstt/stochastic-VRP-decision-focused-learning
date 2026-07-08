@@ -11,7 +11,8 @@ from .analyze_stockout_mechanisms import _markdown_table, _solve_anchor
 from .cvrplib import customer_view, load_instance_json
 from .domain_adapters import available_adapters, get_adapter
 from .ortools_baselines import build_plans
-from .stochastic_engine import FixedRouteProblem, StochasticDecisionEngine, evaluate_solution
+from .scenario_reduction import scenario_reduction_summary, select_representative_scenarios
+from .stochastic_engine import FixedRouteProblem, StochasticDecisionEngine, available_lp_backends, evaluate_solution
 
 
 PROVIDER_LABELS = {"ortools": "OR-Tools", "vroom": "VROOM"}
@@ -33,6 +34,13 @@ def main() -> None:
     parser.add_argument("--fallback-anchor-plan", default="nominal_or_tools")
     parser.add_argument("--time-limit-sec", type=int, default=20)
     parser.add_argument("--lp-time-limit-sec", type=int, default=30)
+    parser.add_argument("--lp-backend", choices=available_lp_backends(), default="pulp_cbc")
+    parser.add_argument(
+        "--lp-planning-scenario-limit",
+        type=int,
+        default=None,
+        help="Use a deterministic total-demand-stratified subset for faster LP diagnostics.",
+    )
     parser.add_argument("--vroom-url", default="http://localhost:3000")
     parser.add_argument("--ambiguity-epsilon", type=float, default=1e-6)
     parser.add_argument("--start-index", type=int, default=0, help="Zero-based instance start index after sorting.")
@@ -68,7 +76,7 @@ def main() -> None:
 
 
 def _run_interventions(args: argparse.Namespace, data_dir: Path) -> tuple[pd.DataFrame, pd.DataFrame]:
-    engine = StochasticDecisionEngine()
+    engine = StochasticDecisionEngine(lp_backend=args.lp_backend)
     rows = []
     audit_rows = []
     instance_paths = sorted(data_dir.glob("*/instance.json"))
@@ -83,6 +91,8 @@ def _run_interventions(args: argparse.Namespace, data_dir: Path) -> tuple[pd.Dat
         instance_dir = instance_json.parent
         nominal, _ = customer_view(instance)
         history = pd.read_csv(instance_dir / "proxy_demand_history.csv").drop(columns=["date"]).to_numpy()
+        lp_history = select_representative_scenarios(history, args.lp_planning_scenario_limit)
+        lp_scenario_summary = scenario_reduction_summary(history, lp_history)
         scenarios = np.load(instance_dir / "proxy_saa_scenarios.npy")
         node_meta = pd.read_csv(instance_dir / "proxy_node_meta.csv")
         plans = build_plans(history, nominal)
@@ -132,7 +142,7 @@ def _run_interventions(args: argparse.Namespace, data_dir: Path) -> tuple[pd.Dat
                 provider: adapter.build_problem(
                     instance=instance,
                     anchor_routes=route_set,
-                    planning_scenarios=history,
+                    planning_scenarios=lp_history,
                     evaluation_scenarios=scenarios,
                     node_meta=node_meta,
                 )
@@ -172,6 +182,7 @@ def _run_interventions(args: argparse.Namespace, data_dir: Path) -> tuple[pd.Dat
                     "OR-Tools Route Count": route_counts["ortools"],
                     "VROOM Route Count": route_counts["vroom"],
                     "Same Route Count": same_route_count,
+                    **lp_scenario_summary,
                 }
                 if route_source == allocation_source:
                     solution = baseline[route_source]
@@ -182,6 +193,7 @@ def _run_interventions(args: argparse.Namespace, data_dir: Path) -> tuple[pd.Dat
                             "Feasible": True,
                             "Reason": "",
                             "Route Cost": problems[route_source].route_cost,
+                            "LP Backend": args.lp_backend,
                             "Planned Load Total": float(np.sum(solution.loads)),
                             "Runtime Sec": solution.runtime_sec,
                             **metrics,
@@ -213,6 +225,7 @@ def _run_interventions(args: argparse.Namespace, data_dir: Path) -> tuple[pd.Dat
                             "Feasible": True,
                             "Reason": "",
                             "Route Cost": hybrid_problem.route_cost,
+                            "LP Backend": args.lp_backend,
                             "Planned Load Total": float(np.sum(solution.loads)),
                             "Runtime Sec": solution.runtime_sec,
                             **metrics,
