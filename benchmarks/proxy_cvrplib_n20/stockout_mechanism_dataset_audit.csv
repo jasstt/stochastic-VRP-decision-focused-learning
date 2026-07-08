@@ -1,0 +1,8 @@
+Category Type,Category,Count,Total,Share,A.5 <=25%
+family,A,4,20,0.2,True
+family,B,4,20,0.2,True
+family,E,3,20,0.15,True
+family,P,9,20,0.45,False
+size_bucket,large_51_99,8,20,0.4,False
+size_bucket,medium_20_50,10,20,0.5,False
+size_bucket,small_n_lt_20,2,20,0.1,True

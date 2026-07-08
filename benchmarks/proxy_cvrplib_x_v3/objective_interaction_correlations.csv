@@ -1,0 +1,29 @@
+Domain,Predictor,n,Unique x Levels,Pearson r,p-value,Bootstrap CI Low,Bootstrap CI High,CI Contains Zero,Evidence Label
+atm,Mean Domain Loss Diff,16,16,0.3928586899168106,0.13225847307328453,0.2522466327085212,0.9559742098890404,False,directional_signal_ci_excludes_zero_but_p_ge_0_05
+atm,Mean Load Penalty Loss Diff,16,1,,,,,False,insufficient_x_variation
+atm,Mean Shortfall Diff,16,16,0.40973967728165783,0.11499352246513762,0.26019132718604276,0.9438072637191987,False,directional_signal_ci_excludes_zero_but_p_ge_0_05
+atm,Mean Surplus Diff,16,16,-0.03161159213101124,0.9074803024029916,-0.6709068469251843,0.7501254712182962,True,no_correlation_ci_crosses_zero
+atm,Mean Total Cost Diff,16,16,0.25996626432737785,0.3308658643859266,-0.17123836122551345,0.6113967736171759,True,no_correlation_ci_crosses_zero
+atm,Planned Load Total Diff,16,16,-0.2718921222427109,0.30834312188609025,-0.8019325105431884,-0.028950010691834886,False,directional_signal_ci_excludes_zero_but_p_ge_0_05
+atm,Route Cost Diff,16,16,0.23573419341114293,0.3794393995612614,-0.2289669288029278,0.5862251094029874,True,no_correlation_ci_crosses_zero
+cargo,Mean Domain Loss Diff,16,16,0.38705678088649187,0.1385826242972994,0.24778496725579127,0.8661912009078908,False,directional_signal_ci_excludes_zero_but_p_ge_0_05
+cargo,Mean Load Penalty Loss Diff,16,1,,,,,False,insufficient_x_variation
+cargo,Mean Shortfall Diff,16,16,0.3956431883296452,0.12929496444039545,0.2523155197896379,0.8668450914371437,False,directional_signal_ci_excludes_zero_but_p_ge_0_05
+cargo,Mean Surplus Diff,16,16,0.016439940942347325,0.9518139967717233,-0.623284725652706,0.6668945450803844,True,no_correlation_ci_crosses_zero
+cargo,Mean Total Cost Diff,16,16,0.023714884953248347,0.9305314803474869,-0.4670458133903859,0.4652377592030459,True,no_correlation_ci_crosses_zero
+cargo,Planned Load Total Diff,16,16,-0.23874179614454358,0.3732088148121807,-0.7311796282131763,0.028327058452624475,True,no_correlation_ci_crosses_zero
+cargo,Route Cost Diff,16,16,0.0007331506799471162,0.9978499520263931,-0.46929551398959174,0.4214681325562358,True,no_correlation_ci_crosses_zero
+cold_chain,Mean Domain Loss Diff,16,16,0.3939230530790422,0.13112022514784472,0.2754376683581597,0.8801693650633673,False,directional_signal_ci_excludes_zero_but_p_ge_0_05
+cold_chain,Mean Load Penalty Loss Diff,16,16,-0.3126443286200258,0.23840587385359002,-0.7554067886871227,0.3175474026837654,True,no_correlation_ci_crosses_zero
+cold_chain,Mean Shortfall Diff,16,16,0.4669313292159064,0.06823953314999212,0.33945092148200495,0.981653179040681,False,directional_signal_ci_excludes_zero_but_p_ge_0_05
+cold_chain,Mean Surplus Diff,16,16,-0.5038791887155472,0.04658680131329747,-0.9495059230830021,-0.33985064975690604,False,candidate_mechanism
+cold_chain,Mean Total Cost Diff,16,16,0.34151533632936765,0.19546004833010222,-0.08097143354467908,0.7004617237940448,True,no_correlation_ci_crosses_zero
+cold_chain,Planned Load Total Diff,16,16,-0.49763328802438994,0.049827314605762674,-0.9625418168660239,-0.35359190535233287,False,candidate_mechanism
+cold_chain,Route Cost Diff,16,16,0.33560319328590305,0.20381173296080268,-0.10328975548496772,0.6941536549482145,True,no_correlation_ci_crosses_zero
+grocery,Mean Domain Loss Diff,16,16,0.3985940878844913,0.12620465032373288,0.278506557200402,0.9518897695511166,False,directional_signal_ci_excludes_zero_but_p_ge_0_05
+grocery,Mean Load Penalty Loss Diff,16,1,,,,,False,insufficient_x_variation
+grocery,Mean Shortfall Diff,16,16,0.44470766483189716,0.08436059478874587,0.312075052503859,0.9740981276903901,False,directional_signal_ci_excludes_zero_but_p_ge_0_05
+grocery,Mean Surplus Diff,16,16,-0.46812533400536355,0.06744234625275683,-0.8868216216280486,-0.29384882612765423,False,directional_signal_ci_excludes_zero_but_p_ge_0_05
+grocery,Mean Total Cost Diff,16,16,0.30466009969914204,0.25124732458272603,-0.14891084496667173,0.6398493883494984,True,no_correlation_ci_crosses_zero
+grocery,Planned Load Total Diff,16,16,-0.4796262110326328,0.06010816509042432,-0.9312484254423915,-0.313729959313533,False,directional_signal_ci_excludes_zero_but_p_ge_0_05
+grocery,Route Cost Diff,16,16,0.2945716987846233,0.2680734894754597,-0.1547062193758678,0.6424603854989526,True,no_correlation_ci_crosses_zero

@@ -1,0 +1,29 @@
+Domain,Predictor,Control,n,Unique x Levels,Pearson r,p-value,Bootstrap CI Low,Bootstrap CI High,CI Contains Zero,Evidence Label
+atm,Mean Domain Loss Diff,Load Variance Diff,16,16,0.059318013345502615,0.827260714666516,-0.6665821058945667,0.8310600398595326,True,no_correlation_ci_crosses_zero
+atm,Mean Load Penalty Loss Diff,Load Variance Diff,16,1,,,,,False,insufficient_variation_or_n
+atm,Mean Shortfall Diff,Load Variance Diff,16,16,0.026484670963817486,0.9224394446665555,-0.6896725816668242,0.8286411443369369,True,no_correlation_ci_crosses_zero
+atm,Mean Surplus Diff,Load Variance Diff,16,16,0.39972557442809736,0.12503336475560203,-0.24308208959201003,0.9094978397990725,True,no_correlation_ci_crosses_zero
+atm,Mean Total Cost Diff,Load Variance Diff,16,16,0.2036039621549775,0.44945230455771,-0.43137014880139557,0.4896620612681472,True,no_correlation_ci_crosses_zero
+atm,Planned Load Total Diff,Load Variance Diff,16,16,0.41967124426144115,0.10560615063309833,-0.2701136962280288,0.8499023431260113,True,no_correlation_ci_crosses_zero
+atm,Route Cost Diff,Load Variance Diff,16,16,0.2031555707983083,0.4504728604862748,-0.42551903708036876,0.4845993797872452,True,no_correlation_ci_crosses_zero
+cargo,Mean Domain Loss Diff,Load Variance Diff,16,16,0.08932848812494801,0.7421648386704318,-0.5030078153856948,0.6153140759235689,True,no_correlation_ci_crosses_zero
+cargo,Mean Load Penalty Loss Diff,Load Variance Diff,16,1,,,,,False,insufficient_variation_or_n
+cargo,Mean Shortfall Diff,Load Variance Diff,16,16,0.05887925673052029,0.8285206900307114,-0.5384186145316112,0.6198606860831528,True,no_correlation_ci_crosses_zero
+cargo,Mean Surplus Diff,Load Variance Diff,16,16,0.3186944104398315,0.2289545199560794,-0.28934212079364807,0.6776227744268124,True,no_correlation_ci_crosses_zero
+cargo,Mean Total Cost Diff,Load Variance Diff,16,16,-0.2717425457892597,0.3086198855456297,-0.8857714177866006,0.32751923369372254,True,no_correlation_ci_crosses_zero
+cargo,Planned Load Total Diff,Load Variance Diff,16,16,0.31855765916010315,0.22916549440691558,-0.2700126090674653,0.714025756565822,True,no_correlation_ci_crosses_zero
+cargo,Route Cost Diff,Load Variance Diff,16,16,-0.28050681541719386,0.2926497273372646,-0.8989799998873224,0.32017212049500393,True,no_correlation_ci_crosses_zero
+cold_chain,Mean Domain Loss Diff,Load Variance Diff,16,16,0.2955205991741293,0.2664622815731762,-0.4244290740769898,0.8968850044348861,True,no_correlation_ci_crosses_zero
+cold_chain,Mean Load Penalty Loss Diff,Load Variance Diff,16,16,-0.17441803684357796,0.5182403730225058,-0.8843673670818174,0.6029275122242195,True,no_correlation_ci_crosses_zero
+cold_chain,Mean Shortfall Diff,Load Variance Diff,16,16,0.20572626356161686,0.4446377062211889,-0.6269623012971942,0.9243877939782227,True,no_correlation_ci_crosses_zero
+cold_chain,Mean Surplus Diff,Load Variance Diff,16,16,-0.05124170153582148,0.8505137485518229,-0.8665984393858934,0.6537946050497285,True,no_correlation_ci_crosses_zero
+cold_chain,Mean Total Cost Diff,Load Variance Diff,16,16,0.4547858605316652,0.07674315310067435,0.18891181300772236,0.7711235367567159,False,directional_signal_ci_excludes_zero_but_p_ge_0_05
+cold_chain,Planned Load Total Diff,Load Variance Diff,16,16,-0.11455482503408856,0.6727002414026224,-0.8908583840955839,0.6267156536586804,True,no_correlation_ci_crosses_zero
+cold_chain,Route Cost Diff,Load Variance Diff,16,16,0.4508106932702864,0.07968577343785414,0.18286296252622888,0.7837200526056484,False,directional_signal_ci_excludes_zero_but_p_ge_0_05
+grocery,Mean Domain Loss Diff,Load Variance Diff,16,16,0.191604447241156,0.47716070706240754,-0.6044428666167625,0.9119660694203438,True,no_correlation_ci_crosses_zero
+grocery,Mean Load Penalty Loss Diff,Load Variance Diff,16,1,,,,,False,insufficient_variation_or_n
+grocery,Mean Shortfall Diff,Load Variance Diff,16,16,0.1300078345196393,0.6313034915422254,-0.6188858782695212,0.9152967163943819,True,no_correlation_ci_crosses_zero
+grocery,Mean Surplus Diff,Load Variance Diff,16,16,0.12579851186838428,0.6424845644551533,-0.8565860897279416,0.7478746437171971,True,no_correlation_ci_crosses_zero
+grocery,Mean Total Cost Diff,Load Variance Diff,16,16,0.34247904443893407,0.1941201338177333,-0.041146623695641406,0.641011656277566,True,no_correlation_ci_crosses_zero
+grocery,Planned Load Total Diff,Load Variance Diff,16,16,0.01432207731164861,0.9580160553340896,-0.873024053443514,0.6908108175025995,True,no_correlation_ci_crosses_zero
+grocery,Route Cost Diff,Load Variance Diff,16,16,0.3391117153853983,0.19882815373635943,-0.06171680155266933,0.6321426551566641,True,no_correlation_ci_crosses_zero

@@ -1,0 +1,9 @@
+Domain,Predictor,n,Unique x Levels,Pearson r,p-value,Bootstrap CI Low,Bootstrap CI High,CI Contains Zero,Evidence Label
+atm,Capacity Util Diff,20,1,,,,,False,insufficient_x_variation
+atm,Vehicle Count Diff,20,1,,,,,False,insufficient_x_variation
+cargo,Capacity Util Diff,20,1,,,,,False,insufficient_x_variation
+cargo,Vehicle Count Diff,20,1,,,,,False,insufficient_x_variation
+cold_chain,Capacity Util Diff,20,1,,,,,False,insufficient_x_variation
+cold_chain,Vehicle Count Diff,20,1,,,,,False,insufficient_x_variation
+grocery,Capacity Util Diff,20,1,,,,,False,insufficient_x_variation
+grocery,Vehicle Count Diff,20,1,,,,,False,insufficient_x_variation
