@@ -1,0 +1,19 @@
+Score Metric,Risk Dimension,Risk Level,Candidate Rows,Candidate Feasible Rows,Winner Rows,Winner Instances,Domain-Specific Instances,Full Confirmation Rows,Strict-Safe Rows
+mean_total_cost,Overall Audit Risk,high,704,96,16,4,0,16,4
+mean_total_cost,Overall Audit Risk,medium,1056,360,96,24,0,96,64
+mean_total_cost,Capacity Pressure Risk,high,352,96,16,4,0,16,4
+mean_total_cost,Capacity Pressure Risk,medium,1408,360,96,24,0,96,64
+mean_total_cost,Prev OR-Tools Anchor Feasible,False,572,12,4,1,0,4,4
+mean_total_cost,Prev OR-Tools Anchor Feasible,True,1188,444,108,27,0,108,64
+mean_domain_loss,Overall Audit Risk,high,704,96,16,4,2,16,8
+mean_domain_loss,Overall Audit Risk,medium,1056,360,96,24,5,96,48
+mean_domain_loss,Capacity Pressure Risk,high,352,96,16,4,2,16,8
+mean_domain_loss,Capacity Pressure Risk,medium,1408,360,96,24,5,96,48
+mean_domain_loss,Prev OR-Tools Anchor Feasible,False,572,12,4,1,1,4,4
+mean_domain_loss,Prev OR-Tools Anchor Feasible,True,1188,444,108,27,6,108,52
+stockout_rate,Overall Audit Risk,high,704,96,16,4,0,16,4
+stockout_rate,Overall Audit Risk,medium,1056,360,96,24,6,96,52
+stockout_rate,Capacity Pressure Risk,high,352,96,16,4,0,16,4
+stockout_rate,Capacity Pressure Risk,medium,1408,360,96,24,6,96,52
+stockout_rate,Prev OR-Tools Anchor Feasible,False,572,12,4,1,0,4,4
+stockout_rate,Prev OR-Tools Anchor Feasible,True,1188,444,108,27,6,108,52

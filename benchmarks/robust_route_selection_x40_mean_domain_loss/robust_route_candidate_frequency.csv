@@ -1,0 +1,25 @@
+Domain,Candidate,Routing Provider,Route Plan,Winner Count,Domain Winner Rows,Winner Share Within Domain
+atm,ortools:nominal_or_tools,ortools,nominal_or_tools,14,28,0.5
+atm,ortools:quantile_p75_scaled_or_tools,ortools,quantile_p75_scaled_or_tools,5,28,0.17857142857142858
+atm,ortools:proxy_mean_scaled_or_tools,ortools,proxy_mean_scaled_or_tools,4,28,0.14285714285714285
+atm,ortools:robust_mean_1std_scaled_or_tools,ortools,robust_mean_1std_scaled_or_tools,2,28,0.07142857142857142
+atm,ortools:robust_mean_2std_scaled_or_tools,ortools,robust_mean_2std_scaled_or_tools,2,28,0.07142857142857142
+atm,ortools:quantile_p90_scaled_or_tools,ortools,quantile_p90_scaled_or_tools,1,28,0.03571428571428571
+cargo,ortools:nominal_or_tools,ortools,nominal_or_tools,14,28,0.5
+cargo,ortools:robust_mean_1std_scaled_or_tools,ortools,robust_mean_1std_scaled_or_tools,4,28,0.14285714285714285
+cargo,ortools:proxy_mean_scaled_or_tools,ortools,proxy_mean_scaled_or_tools,3,28,0.10714285714285714
+cargo,ortools:quantile_p75_scaled_or_tools,ortools,quantile_p75_scaled_or_tools,3,28,0.10714285714285714
+cargo,ortools:robust_mean_2std_scaled_or_tools,ortools,robust_mean_2std_scaled_or_tools,3,28,0.10714285714285714
+cargo,ortools:quantile_p90_scaled_or_tools,ortools,quantile_p90_scaled_or_tools,1,28,0.03571428571428571
+cold_chain,ortools:nominal_or_tools,ortools,nominal_or_tools,16,28,0.5714285714285714
+cold_chain,ortools:proxy_mean_scaled_or_tools,ortools,proxy_mean_scaled_or_tools,4,28,0.14285714285714285
+cold_chain,ortools:quantile_p75_scaled_or_tools,ortools,quantile_p75_scaled_or_tools,3,28,0.10714285714285714
+cold_chain,ortools:robust_mean_2std_scaled_or_tools,ortools,robust_mean_2std_scaled_or_tools,2,28,0.07142857142857142
+cold_chain,ortools:proxy_mean_or_tools,ortools,proxy_mean_or_tools,1,28,0.03571428571428571
+cold_chain,ortools:quantile_p90_scaled_or_tools,ortools,quantile_p90_scaled_or_tools,1,28,0.03571428571428571
+cold_chain,ortools:robust_mean_1std_scaled_or_tools,ortools,robust_mean_1std_scaled_or_tools,1,28,0.03571428571428571
+grocery,ortools:nominal_or_tools,ortools,nominal_or_tools,16,28,0.5714285714285714
+grocery,ortools:proxy_mean_scaled_or_tools,ortools,proxy_mean_scaled_or_tools,4,28,0.14285714285714285
+grocery,ortools:quantile_p75_scaled_or_tools,ortools,quantile_p75_scaled_or_tools,4,28,0.14285714285714285
+grocery,ortools:robust_mean_1std_scaled_or_tools,ortools,robust_mean_1std_scaled_or_tools,2,28,0.07142857142857142
+grocery,ortools:robust_mean_2std_scaled_or_tools,ortools,robust_mean_2std_scaled_or_tools,2,28,0.07142857142857142

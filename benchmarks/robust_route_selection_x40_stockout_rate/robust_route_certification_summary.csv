@@ -1,0 +1,6 @@
+Scope,Winner Rows,Confirmed Rows,Confirm Feasible Rows,Metric Stability Safe Rows,Strict Stability Safe Rows,Strict Stability Safe Rate,Final Full Required Rows,Ranking Flip Rows
+all,112,112,112,112,56,0.5,56,14
+domain:atm,28,28,28,28,14,0.5,14,14
+domain:cargo,28,28,28,28,14,0.5,14,14
+domain:cold_chain,28,28,28,28,14,0.5,14,14
+domain:grocery,28,28,28,28,14,0.5,14,14
