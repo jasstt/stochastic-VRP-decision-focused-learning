@@ -128,6 +128,26 @@ python -m benchmark_proxy_vrp.benchmark_lp_backends \
   --lp-planning-scenario-limit 60
 ```
 
+Run robust route selection over multiple route candidates and score each
+candidate through the same domain stochastic decision layer:
+
+```bash
+python -m benchmark_proxy_vrp.run_robust_route_selection \
+  --data-dir benchmarks/proxy_cvrplib_x_v4 \
+  --out-dir benchmarks/robust_route_selection \
+  --max-instances 2 \
+  --routing-providers ortools \
+  --lp-planning-scenario-limit 60 \
+  --confirm-winners-full-scenario
+```
+
+The route-selection runner defaults to fast LP screening with
+`--lp-planning-scenario-limit 60`. Add `--confirm-winners-full-scenario` to
+rerun only the selected domain winners with full planning history and emit
+stockout/cost drift plus domain-ranking stability checks. A winner is
+decision-ready only when it is metric-safe and does not trigger a domain
+stockout ranking flip.
+
 Run the same engine through VROOM in custom-matrix mode:
 
 ```bash

@@ -1,0 +1,3 @@
+Domain,Candidate_Rows,Feasible_Rows,Instances,Candidates,Median_Total_Runtime_Sec,Top_Winning_Candidate,Top_Winning_Provider,Top_Winning_Route_Plan,Top_Winner_Count
+atm,10,4,1,10,2.002914071083069,ortools:proxy_mean_or_tools,ortools,proxy_mean_or_tools,1
+cold_chain,10,4,1,10,2.002914071083069,ortools:nominal_or_tools,ortools,nominal_or_tools,1
