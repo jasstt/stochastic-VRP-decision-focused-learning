@@ -1,0 +1,3 @@
+Domain,Winner Rows,Instances,Unique Winning Candidates,Unique Winning Route Plans,Unique Winning Providers,Winner Candidate Entropy,Winner Route Plan Entropy,Normalized Winner Candidate Entropy,Top Candidate,Top Candidate Count,Top Candidate Share,Top Route Plan,Top Route Plan Count,Top Route Plan Share,Confirmed Rows,Strict Stability Safe Rate,Metric Stability Safe Rate,Final Full Required Rows,Max Stockout Relative Drift,Max Mean Total Cost Relative Drift
+atm,1,1,1,1,1,0.0,0.0,0.0,ortools:proxy_mean_or_tools,1,1.0,proxy_mean_or_tools,1,1.0,1,1.0,1.0,0,0.004302103250478,0.0041161703897147
+cold_chain,1,1,1,1,1,0.0,0.0,0.0,ortools:nominal_or_tools,1,1.0,nominal_or_tools,1,1.0,1,1.0,1.0,0,0.0115631691648823,0.0063529330826772

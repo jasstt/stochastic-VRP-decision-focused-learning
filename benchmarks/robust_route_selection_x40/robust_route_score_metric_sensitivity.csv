@@ -1,0 +1,7 @@
+Metric,Winner Rows,Winner Instances,Unique Winning Route Plans,Unique Winning Candidates,Instances With Domain-Specific Route Choice,Share Domain-Specific Instances,Mean Unique Route Plans Across Domains,Max Unique Route Plans Across Domains,Top Route Plan,Top Route Plan Count,Top Route Plan Share,Top Candidate,Top Candidate Share
+cvar90_total_cost,112,28,4,4,1,0.03571428571428571,1.0357142857142858,2.0,nominal_or_tools,103,0.9196428571428571,ortools:nominal_or_tools,0.9196428571428571
+mean_domain_loss,112,28,7,7,7,0.25,1.3928571428571428,4.0,nominal_or_tools,60,0.5357142857142857,ortools:nominal_or_tools,0.5357142857142857
+mean_shortfall,112,28,7,7,5,0.17857142857142858,1.2142857142857142,3.0,nominal_or_tools,67,0.5982142857142857,ortools:nominal_or_tools,0.5982142857142857
+mean_total_cost,112,28,3,3,0,0.0,1.0,1.0,nominal_or_tools,104,0.9285714285714286,ortools:nominal_or_tools,0.9285714285714286
+p90_total_cost,112,28,3,3,0,0.0,1.0,1.0,nominal_or_tools,104,0.9285714285714286,ortools:nominal_or_tools,0.9285714285714286
+stockout_rate,112,28,6,6,6,0.21428571428571427,1.2142857142857142,2.0,nominal_or_tools,69,0.6160714285714286,ortools:nominal_or_tools,0.6160714285714286

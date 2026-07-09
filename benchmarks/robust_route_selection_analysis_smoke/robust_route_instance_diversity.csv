@@ -1,0 +1,2 @@
+Instance,Customers,Domains,Winner Rows,Unique Winning Candidates Across Domains,Unique Winning Route Plans Across Domains,Route Plan Entropy Across Domains,Normalized Route Plan Entropy Across Domains,Candidate Entropy Across Domains,All Domains Same Candidate,All Domains Same Route Plan,Confirmed Winner Rows,Strict Stability Safe Rows,Final Full Required Rows,Ranking Flip,Max Stockout Relative Drift,Max Mean Total Cost Relative Drift
+A-n32-k5,31.0,2,2,2,2,1.0,1.0,1.0,False,False,2,2,0,False,0.0115631691648823,0.0063529330826772
