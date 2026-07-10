@@ -1,0 +1,5 @@
+Domain,Candidate_Rows,Feasible_Rows,Instances,Candidates,Median_Total_Runtime_Sec,Top_Winning_Candidate,Top_Winning_Provider,Top_Winning_Route_Plan,Top_Winner_Count
+atm,384,175,24,16,5.0051655769348145,ortools:nominal_seed101_or_tools,ortools,nominal_seed101_or_tools,5
+cargo,384,175,24,16,5.0051655769348145,ortools:nominal_seed101_or_tools,ortools,nominal_seed101_or_tools,4
+cold_chain,384,175,24,16,5.0051655769348145,ortools:nominal_seed103_or_tools,ortools,nominal_seed103_or_tools,4
+grocery,384,175,24,16,5.0051655769348145,ortools:nominal_seed101_or_tools,ortools,nominal_seed101_or_tools,3

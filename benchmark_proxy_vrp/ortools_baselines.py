@@ -32,6 +32,8 @@ def solve_cvrp_ortools(
     planned_customer_loads: np.ndarray,
     method: str,
     time_limit_sec: int = 5,
+    random_seed: int | None = None,
+    cost_jitter: float = 0.0,
 ) -> RouteSolution:
     n_vehicles = vehicle_count_from_name(instance.name)
     planned_node_loads = _customer_loads_to_nodes(instance, planned_customer_loads)
@@ -44,11 +46,12 @@ def solve_cvrp_ortools(
 
     manager = pywrapcp.RoutingIndexManager(instance.n_nodes, n_vehicles, instance.depot_index)
     routing = pywrapcp.RoutingModel(manager)
+    search_distance_matrix = _search_distance_matrix(instance.distance_matrix, random_seed, cost_jitter)
 
     def distance_callback(from_index: int, to_index: int) -> int:
         from_node = manager.IndexToNode(from_index)
         to_node = manager.IndexToNode(to_index)
-        return int(instance.distance_matrix[from_node, to_node])
+        return int(search_distance_matrix[from_node, to_node])
 
     transit_index = routing.RegisterTransitCallback(distance_callback)
     routing.SetArcCostEvaluatorOfAllVehicles(transit_index)
@@ -78,7 +81,7 @@ def solve_cvrp_ortools(
         return RouteSolution(method, False, float("nan"), [], runtime, "ortools_no_solution")
 
     routes: list[list[int]] = []
-    route_cost = 0
+    route_cost = 0.0
     for vehicle_id in range(n_vehicles):
         index = routing.Start(vehicle_id)
         route: list[int] = []
@@ -87,12 +90,34 @@ def solve_cvrp_ortools(
             route.append(node)
             prev_index = index
             index = solution.Value(routing.NextVar(index))
-            route_cost += routing.GetArcCostForVehicle(prev_index, index, vehicle_id)
+            from_node = manager.IndexToNode(prev_index)
+            to_node = manager.IndexToNode(index)
+            route_cost += float(instance.distance_matrix[from_node, to_node])
         route.append(manager.IndexToNode(index))
         if len(route) > 2:
             routes.append(route)
 
     return RouteSolution(method, True, float(route_cost), routes, runtime)
+
+
+def _search_distance_matrix(
+    distance_matrix: np.ndarray,
+    random_seed: int | None,
+    cost_jitter: float,
+) -> np.ndarray:
+    if random_seed is None or cost_jitter <= 0:
+        return distance_matrix
+    rng = np.random.default_rng(int(random_seed))
+    matrix = np.asarray(distance_matrix, dtype=float)
+    noise = rng.uniform(-float(cost_jitter), float(cost_jitter), size=matrix.shape)
+    if matrix.shape[0] == matrix.shape[1]:
+        upper = np.triu(noise, 1)
+        noise = upper + upper.T
+    jittered = matrix * (1.0 + noise)
+    jittered[matrix <= 0] = 0
+    jittered = np.rint(jittered).astype(int)
+    jittered[(matrix > 0) & (jittered <= 0)] = 1
+    return jittered
 
 
 def build_plans(history: np.ndarray, nominal: np.ndarray) -> dict[str, np.ndarray]:

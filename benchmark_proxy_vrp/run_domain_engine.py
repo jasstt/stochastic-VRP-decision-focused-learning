@@ -145,8 +145,10 @@ def _solve_with_provider(
     routing_provider,
     vroom_url,
     time_limit_sec,
+    route_random_seed: int | None = None,
+    route_cost_jitter: float = 0.0,
 ) -> RouteSet:
-    provider = _make_provider(routing_provider, method, vroom_url, time_limit_sec)
+    provider = _make_provider(routing_provider, method, vroom_url, time_limit_sec, route_random_seed, route_cost_jitter)
     nodes, demands, distance_matrix = instance_to_provider_inputs(instance, planned_customer_loads)
     return provider.solve(
         nodes=nodes,
@@ -157,9 +159,21 @@ def _solve_with_provider(
     )
 
 
-def _make_provider(routing_provider: str, method: str, vroom_url: str, time_limit_sec: int):
+def _make_provider(
+    routing_provider: str,
+    method: str,
+    vroom_url: str,
+    time_limit_sec: int,
+    route_random_seed: int | None = None,
+    route_cost_jitter: float = 0.0,
+):
     if routing_provider == "ortools":
-        return OrToolsProvider(method=method, time_limit_sec=time_limit_sec)
+        return OrToolsProvider(
+            method=method,
+            time_limit_sec=time_limit_sec,
+            random_seed=route_random_seed,
+            cost_jitter=route_cost_jitter,
+        )
     if routing_provider == "vroom":
         return VroomProvider(vroom_url=vroom_url, method=method, timeout_sec=max(5, time_limit_sec + 5))
     raise ValueError(f"Unknown routing provider: {routing_provider}")

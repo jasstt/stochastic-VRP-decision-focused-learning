@@ -1,0 +1,4 @@
+Score Metric,Risk Dimension,Risk Level,Candidate Rows,Candidate Feasible Rows,Winner Rows,Winner Instances,Domain-Specific Instances,Full Confirmation Rows,Strict-Safe Rows
+seeded_mean_domain_loss,Overall Audit Risk,medium,1536,700,96,24,6,96,45
+seeded_mean_domain_loss,Capacity Pressure Risk,medium,1536,700,96,24,6,96,45
+seeded_mean_domain_loss,Prev OR-Tools Anchor Feasible,True,1536,700,96,24,6,96,45

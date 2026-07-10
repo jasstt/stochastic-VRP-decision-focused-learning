@@ -1,0 +1,7 @@
+Score Metric,Risk Isolation Group,Instances,Winner Domain-Specific Instances,Fully Certified Instances,Certified Domain-Specific Instances,Certified Diversity Share,Certified Domain-Specific Instance List
+mean_domain_loss,anchor_feasible_medium_risk,24,5,12,3,0.25,"X-n134-k13, X-n143-k7, X-n190-k8"
+mean_domain_loss,high_risk_or_anchor_infeasible,4,2,2,2,1.0,"X-n214-k11, X-n233-k16"
+mean_total_cost,anchor_feasible_medium_risk,24,0,16,0,0.0,
+mean_total_cost,high_risk_or_anchor_infeasible,4,0,1,0,0.0,
+stockout_rate,anchor_feasible_medium_risk,24,6,13,3,0.23076923076923078,"X-n134-k13, X-n190-k8, X-n261-k13"
+stockout_rate,high_risk_or_anchor_infeasible,4,0,1,0,0.0,

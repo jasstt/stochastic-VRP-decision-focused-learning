@@ -11,9 +11,17 @@ from .base import RouteSet, RoutingSolutionProvider
 
 
 class OrToolsProvider(RoutingSolutionProvider):
-    def __init__(self, method: str = "ortools_provider", time_limit_sec: int = 5) -> None:
+    def __init__(
+        self,
+        method: str = "ortools_provider",
+        time_limit_sec: int = 5,
+        random_seed: int | None = None,
+        cost_jitter: float = 0.0,
+    ) -> None:
         self.method = method
         self.time_limit_sec = time_limit_sec
+        self.random_seed = random_seed
+        self.cost_jitter = cost_jitter
 
     def solve(
         self,
@@ -35,6 +43,8 @@ class OrToolsProvider(RoutingSolutionProvider):
             planned_customer_loads,
             method=self.method,
             time_limit_sec=self.time_limit_sec,
+            random_seed=self.random_seed,
+            cost_jitter=self.cost_jitter,
         )
         route_costs = _route_costs(solution.routes, instance.distance_matrix)
         return RouteSet(
@@ -48,6 +58,8 @@ class OrToolsProvider(RoutingSolutionProvider):
                 "method": solution.method,
                 "runtime_sec": solution.runtime_sec,
                 "reason": solution.reason,
+                "random_seed": self.random_seed,
+                "cost_jitter": self.cost_jitter,
             },
         )
 

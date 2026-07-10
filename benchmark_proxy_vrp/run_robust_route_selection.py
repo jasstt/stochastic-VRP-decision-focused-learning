@@ -50,6 +50,13 @@ class CandidateRoute:
     route_set: object | None
 
 
+@dataclass(frozen=True)
+class RandomizedRouteVariant:
+    plan_name: str
+    base_plan_name: str
+    seed: int
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         description="Evaluate multiple route candidates through the common stochastic decision layer."
@@ -73,6 +80,22 @@ def main() -> None:
         help="Default fast mode. Use 0 or a negative value to keep the full planning history.",
     )
     parser.add_argument("--score-metric", choices=SCORE_METRICS, default="mean_total_cost")
+    parser.add_argument(
+        "--randomized-route-variants",
+        nargs="*",
+        default=None,
+        help=(
+            "Extra OR-Tools seeded route variants as base_plan:seed. "
+            "This OR-Tools build has no native random_seed field, so variants use seeded "
+            "search-cost perturbation and still report true cost on the original matrix."
+        ),
+    )
+    parser.add_argument(
+        "--randomized-route-cost-jitter",
+        type=float,
+        default=0.02,
+        help="Relative search-cost perturbation for --randomized-route-variants.",
+    )
     parser.add_argument(
         "--confirm-winners-full-scenario",
         action="store_true",
@@ -131,6 +154,7 @@ def _run_selection(args: argparse.Namespace, data_dir: Path) -> tuple[pd.DataFra
         node_meta = pd.read_csv(instance_dir / "proxy_node_meta.csv")
         fleet_capacity = float(vehicle_count_from_name(instance.name) * instance.capacity)
         plans = add_capacity_projected_plans(build_plans(history, nominal), fleet_capacity=fleet_capacity)
+        randomized_variants = _add_randomized_route_variants(plans, args.randomized_route_variants)
         plan_names = _candidate_plan_names(plans, args.candidate_plans)
 
         print(
@@ -138,7 +162,7 @@ def _run_selection(args: argparse.Namespace, data_dir: Path) -> tuple[pd.DataFra
             f"{len(plan_names)} plans x {len(args.routing_providers)} providers",
             flush=True,
         )
-        routes = _solve_candidate_routes(args, instance, plans, plan_names, fleet_capacity)
+        routes = _solve_candidate_routes(args, instance, plans, plan_names, fleet_capacity, randomized_variants)
         route_rows.extend(_route_rows(instance, routes, lp_summary))
 
         for candidate in routes:
@@ -227,12 +251,59 @@ def _candidate_plan_names(plans: dict[str, np.ndarray], requested: list[str] | N
     return ordered + scaled + extras
 
 
+def _add_randomized_route_variants(
+    plans: dict[str, np.ndarray],
+    requested: list[str] | None,
+) -> dict[str, RandomizedRouteVariant]:
+    if not requested:
+        return {}
+    variants: dict[str, RandomizedRouteVariant] = {}
+    for spec in requested:
+        if ":" not in spec:
+            raise ValueError(f"Randomized route variant must be base_plan:seed, got {spec!r}")
+        base_plan_name, seed_text = spec.split(":", 1)
+        base_plan_name = base_plan_name.strip()
+        if base_plan_name not in plans:
+            raise ValueError(f"Unknown randomized route base plan {base_plan_name!r}")
+        seed = int(seed_text)
+        plan_name = _randomized_route_plan_name(base_plan_name, seed)
+        plans[plan_name] = np.asarray(plans[base_plan_name], dtype=float).copy()
+        variants[plan_name] = RandomizedRouteVariant(plan_name=plan_name, base_plan_name=base_plan_name, seed=seed)
+    return variants
+
+
+def _randomized_route_plan_name(base_plan_name: str, seed: int) -> str:
+    if base_plan_name.endswith("_or_tools"):
+        return base_plan_name[: -len("_or_tools")] + f"_seed{seed}_or_tools"
+    return f"{base_plan_name}_seed{seed}"
+
+
+def _randomized_variant_for_plan(
+    plan_name: str,
+    variants: dict[str, RandomizedRouteVariant],
+) -> RandomizedRouteVariant | None:
+    if plan_name in variants:
+        return variants[plan_name]
+    marker = "_seed"
+    if marker not in plan_name:
+        return None
+    prefix, rest = plan_name.rsplit(marker, 1)
+    if not rest.endswith("_or_tools"):
+        return None
+    seed_text = rest[: -len("_or_tools")]
+    if not seed_text.isdigit():
+        return None
+    base_plan_name = prefix + "_or_tools"
+    return RandomizedRouteVariant(plan_name=plan_name, base_plan_name=base_plan_name, seed=int(seed_text))
+
+
 def _solve_candidate_routes(
     args: argparse.Namespace,
     instance,
     plans: dict[str, np.ndarray],
     plan_names: list[str],
     fleet_capacity: float,
+    randomized_variants: dict[str, RandomizedRouteVariant],
 ) -> list[CandidateRoute]:
     routes = []
     for provider in args.routing_providers:
@@ -240,7 +311,10 @@ def _solve_candidate_routes(
             planned_loads = plans[plan_name]
             candidate_name = f"{provider}:{plan_name}"
             planned_total = float(np.sum(planned_loads))
+            randomized_variant = randomized_variants.get(plan_name)
             try:
+                if randomized_variant is not None and provider != "ortools":
+                    raise ValueError("randomized_route_variants_require_ortools")
                 route_set = _solve_with_provider(
                     instance=instance,
                     planned_customer_loads=planned_loads,
@@ -248,6 +322,8 @@ def _solve_candidate_routes(
                     routing_provider=provider,
                     vroom_url=args.vroom_url,
                     time_limit_sec=args.time_limit_sec,
+                    route_random_seed=randomized_variant.seed if randomized_variant else None,
+                    route_cost_jitter=args.randomized_route_cost_jitter if randomized_variant else 0.0,
                 )
                 reason = str(route_set.raw_metadata.get("reason", ""))
             except Exception as exc:  # VROOM can be optional in local smoke runs.
@@ -373,6 +449,11 @@ def _confirm_winners_full_scenario(
         node_meta = pd.read_csv(instance_dir / "proxy_node_meta.csv")
         fleet_capacity = float(vehicle_count_from_name(instance.name) * instance.capacity)
         plans = add_capacity_projected_plans(build_plans(history, nominal), fleet_capacity=fleet_capacity)
+        randomized_variants = _add_randomized_route_variants(plans, args.randomized_route_variants)
+        inferred_variant = _randomized_variant_for_plan(plan_name, randomized_variants)
+        if inferred_variant is not None and plan_name not in plans and inferred_variant.base_plan_name in plans:
+            plans[plan_name] = np.asarray(plans[inferred_variant.base_plan_name], dtype=float).copy()
+            randomized_variants[plan_name] = inferred_variant
 
         base_row = {
             "Instance": instance_name,
@@ -413,6 +494,8 @@ def _confirm_winners_full_scenario(
                 routing_provider=provider,
                 vroom_url=args.vroom_url,
                 time_limit_sec=args.time_limit_sec,
+                route_random_seed=randomized_variants[plan_name].seed if plan_name in randomized_variants else None,
+                route_cost_jitter=args.randomized_route_cost_jitter if plan_name in randomized_variants else 0.0,
             )
         except Exception as exc:
             rows.append({**base_row, "Reason": f"route_solver_error:{type(exc).__name__}:{exc}"})

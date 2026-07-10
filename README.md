@@ -91,6 +91,51 @@ python phase5_final_report.py
 
 All results are computed on **synthetic data** generated to mimic realistic CIT/ATM demand patterns (salary-day effects, weekend effects, location variance). They are intended to demonstrate the methodology — stochastic VRP formulation and decision-focused learning — rather than to represent any specific real-world deployment. Absolute figures (cost, stockout rate, savings) should not be read as production estimates; the relative ordering between approaches (stochastic > deterministic, SPO+ > MSE) is the result that's consistent with the broader literature on decision-focused learning.
 
+## Robust Route Selection Branch Result
+
+This branch tests whether a sector-aware stochastic decision layer can select different route candidates for different domain objectives on X40 CVRPLIB proxy-demand benchmarks. These are OR-Tools-only, proxy-demand results; they are not solver-agnostic or real-sector-demand claims.
+
+### TUR 1 — Post-hoc score sensitivity
+
+`mean_total_cost` produced no domain-specific route choice: 0 / 28 winner-producing instances. Post-hoc re-ranking suggested a possible signal for `mean_domain_loss` and `stockout_rate`, but that was not yet a real rerun.
+
+### TUR 2 — Real score-metric experiments
+
+`mean_domain_loss` and `stockout_rate` were rerun as first-class X40 experiments with full-scenario winner confirmation. They did produce domain-specific route winners:
+
+| Score metric | Domain-specific instances | Certified domain-specific instances | Ranking flip rate |
+| --- | ---: | ---: | ---: |
+| `mean_total_cost` | 0 / 28 | 0 / 17 | 39.3% |
+| `mean_domain_loss` | 7 / 28 | 5 / 14 | 50.0% |
+| `stockout_rate` | 6 / 28 | 3 / 14 | 50.0% |
+
+### TUR 3 — Risk isolation
+
+The open question was whether certified diversity came mostly from fragile high-risk instances. Risk isolation split X40 into `anchor_feasible_medium_risk` and `high_risk_or_anchor_infeasible`.
+
+| Score metric | Medium-risk certified diversity | High-risk certified diversity |
+| --- | ---: | ---: |
+| `mean_domain_loss` | 3 / 12 | 2 / 2 |
+| `stockout_rate` | 3 / 13 | 0 / 1 |
+
+**Sonuç:** clean signal exists. Certified domain-specific choice is not only a high-risk artifact.
+
+### TUR 4 — Medium-risk candidate pool + tie-breaker
+
+Because risk isolation passed, the medium-risk subset was tested with 5 added seeded OR-Tools route variants and a stockout-drift tie-breaker over near-tied `mean_domain_loss` candidates. The installed OR-Tools build does not expose a native `random_seed` field, so the variants use reproducible seeded search-cost perturbation while reporting true route cost on the original distance matrix.
+
+| Test | Candidate feasible rows | Certified domain-specific instances | Ranking flip rate | Strict-safe rows |
+| --- | ---: | ---: | ---: | ---: |
+| Medium-risk baseline `mean_domain_loss` | 360 | 3 | n/a | n/a |
+| Seeded candidate pool | 700 | 0 | 12 / 24 | 45 / 96 |
+| Seeded pool + stockout-drift tie-breaker | 700 | 10 | 11 / 24 | 52 / 96 |
+
+### Karar
+
+Branch status: **KISMEN/STRONG_DIAGNOSTIC**.
+
+The branch is not a full PASS because ranking flips remain material and the current tie-breaker full-confirms many near-tied candidates. It is also not a FAIL: risk isolation passed, and the medium-risk tie-breaker produced 10 certified domain-specific instances. The next step is to make the tie-breaker cheaper and more stable with a tolerance sweep and a fast drift proxy before running all X40 again.
+
 ## 🔬 Quantum Extension (Phase 2b–2f)
 
 Phase 2 of this project goes beyond the classical CVRP baseline and explores whether
