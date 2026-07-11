@@ -1,0 +1,25 @@
+Instance,Winner Domains,Winner Unique Route Plans,Winner Domain-Specific,Strict-Safe Domains,Certified Unique Route Plans,Fully Certified Instance,Certified Domain-Specific
+X-n106-k14,4,2,True,0,0,False,False
+X-n110-k13,4,2,True,0,0,False,False
+X-n115-k10,4,1,False,2,1,False,False
+X-n120-k6,4,3,True,4,3,True,True
+X-n129-k18,4,2,True,4,2,True,True
+X-n134-k13,4,3,True,4,3,True,True
+X-n139-k10,4,3,True,0,0,False,False
+X-n143-k7,4,4,True,4,4,True,True
+X-n162-k11,4,1,False,4,1,True,False
+X-n167-k10,4,1,False,4,1,True,False
+X-n181-k23,4,2,True,0,0,False,False
+X-n186-k15,4,1,False,4,1,True,False
+X-n190-k8,4,2,True,4,2,True,True
+X-n204-k19,4,2,True,0,0,False,False
+X-n209-k16,4,1,False,0,0,False,False
+X-n223-k34,4,2,True,4,2,True,True
+X-n228-k23,4,1,False,4,1,True,False
+X-n237-k14,4,3,True,4,3,True,True
+X-n242-k48,4,2,True,4,2,True,True
+X-n251-k28,4,1,False,4,1,True,False
+X-n261-k13,4,3,True,4,3,True,True
+X-n275-k28,4,3,True,4,3,True,True
+X-n280-k17,4,2,True,0,0,False,False
+X-n284-k15,4,3,True,4,3,True,True

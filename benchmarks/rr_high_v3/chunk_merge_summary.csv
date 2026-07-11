@@ -1,0 +1,6 @@
+File,Rows,Status
+robust_route_candidate_results.csv,1024,merged
+robust_route_candidates.csv,256,merged
+robust_route_winners.csv,16,merged
+robust_route_winner_full_confirmation.csv,0,missing
+robust_route_winner_ranking_stability.csv,0,missing

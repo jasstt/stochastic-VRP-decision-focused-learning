@@ -1,0 +1,4 @@
+File,Rows,Instances
+robust_route_candidate_results.csv,2560,40
+robust_route_candidates.csv,640,40
+robust_route_winners.csv,112,28

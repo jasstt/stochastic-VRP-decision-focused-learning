@@ -1,0 +1,2 @@
+Tolerance,Near-tied Candidates,Full-LP Calls Required,New Full-LP Calls This Run,Full-Confirmed Rows,Winner Rows,Fully Certified Instances,Certified Domain-Specific Instances,Certified Diversity,Ranking Flips,Ranking Rows,Flip Rate,Strict-Safe Rows,Full-LP Call Reduction vs Max Tolerance,Selected Best Tradeoff
+0.005,482,482,161,482,112,19,14,14 / 19,8,28,0.2857142857142857,78,0.0,True

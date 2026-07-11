@@ -1,0 +1,7 @@
+Tolerance,Risk Group,Instances,Fully Certified Instances,Certified Domain-Specific Instances,Certified Diversity,Ranking Flips,Ranking Rows,Flip Rate
+0.001,anchor_feasible_medium_risk,24,12,6,6 / 12,10,24,0.4166666666666667
+0.001,high_risk_or_anchor_infeasible,0,0,0,0 / 0,0,0,
+0.005,anchor_feasible_medium_risk,24,16,11,11 / 16,7,24,0.2916666666666667
+0.005,high_risk_or_anchor_infeasible,0,0,0,0 / 0,0,0,
+0.01,anchor_feasible_medium_risk,24,13,10,10 / 13,11,24,0.4583333333333333
+0.01,high_risk_or_anchor_infeasible,0,0,0,0 / 0,0,0,

@@ -215,3 +215,19 @@ Doğru cümle:
 Henüz doğru olmayan cümle:
 
 > Stockout sıralamasındaki motor farkının kök nedeni route-level load allocation'dır.
+
+## A.13 Robust Route Selection Cost-Control Dersi
+
+`feature/robust-route-selection` dalında near-tied route candidates için stockout-drift tie-breaker test edildi. İlk medium-risk koşuda `1.0%` near-tie tolerance 440 full-LP confirmation satırı gerektirdi ve 10 certified domain-specific instance verdi. Tolerance sweep sonucu `0.5%` daha iyi trade-off verdi:
+
+| Tolerance | Near-tied candidates | Certified domain-specific instances | Ranking flips |
+|---|---:|---:|---:|
+| 0.1% | 164 | 6 / 12 | 10 / 24 |
+| 0.5% | 321 | 11 / 16 | 7 / 24 |
+| 1.0% | 440 | 10 / 13 | 11 / 24 |
+
+Tam X40 seeded candidate pool üzerinde `0.5%` tolerance 482 full-LP confirmation satırı gerektirdi ve 14 / 19 certified domain-specific instance üretti. Ranking flip oranı 8 / 28 oldu. Aynı X40 pool'da `1.0%` tolerance 607 near-tied satır üretecekti; bu nedenle `0.5%` yaklaşık %20.6 full-LP call reduction sağladı.
+
+Fast drift proxy denendi fakat üretim gate'i olarak başarısız oldu. Candidate-level ucuz özellikler (primary-score gap, route cost deviation, planned load-ratio deviation, route-count mismatch, fast stockout/shortfall/load-penalty deviation) full-confirmed stockout drift'i güvenli biçimde ayıramadı. Full X40 doğrulamasında proxy threshold aralığı `0.10-0.30` için false-negative oranı %50 ile %100 arasındaydı. Bu yüzden full-LP confirmation hâlâ zorunludur.
+
+OR-Tools sınırlaması: mevcut kurulum native `random_seed` alanı sunmuyor. Seeded route variants, native solver seed'i değil, reproducible search-cost perturbation kullanıyor; raporlanan route cost yine orijinal distance matrix üzerinden hesaplanıyor. Gelecekte native seed desteği olan OR-Tools sürümüyle aynı TUR 5 doğrulaması tekrarlanmalıdır.

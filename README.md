@@ -130,11 +130,33 @@ Because risk isolation passed, the medium-risk subset was tested with 5 added se
 | Seeded candidate pool | 700 | 0 | 12 / 24 | 45 / 96 |
 | Seeded pool + stockout-drift tie-breaker | 700 | 10 | 11 / 24 | 52 / 96 |
 
+### TUR 5 — Cost-controlled tie-breaker on X40
+
+The tie-breaker was made cheaper with route caching, chunked execution, and a near-tie tolerance sweep. On the medium-risk subset, `0.5%` was the best trade-off:
+
+| Tolerance | Near-tied candidates | Certified domain-specific instances | Ranking flip rate | Strict-safe rows |
+| --- | ---: | ---: | ---: | ---: |
+| `0.1%` | 164 | 6 / 12 | 10 / 24 | 52 / 96 |
+| `0.5%` | 321 | 11 / 16 | 7 / 24 | 66 / 96 |
+| `1.0%` | 440 | 10 / 13 | 11 / 24 | 52 / 96 |
+
+The selected `0.5%` tolerance was then applied to the merged X40 seeded candidate pool:
+
+| Scope | Winner-producing instances | Certified domain-specific instances | Ranking flip rate | Strict-safe rows |
+| --- | ---: | ---: | ---: | ---: |
+| Full X40 seeded pool | 28 | 14 / 19 | 8 / 28 | 78 / 112 |
+| Medium-risk subset | 24 | 11 / 16 | 7 / 24 | n/a |
+| High-risk / anchor-infeasible subset | 4 | 3 / 3 | 1 / 4 | n/a |
+
+Cost result: `0.5%` required 482 full-LP confirmation rows on X40, versus 607 near-tied rows at `1.0%` tolerance, a 20.6% reduction. In this run, only 161 new full-LP confirmations were needed because the medium-risk confirmation cache was reused.
+
+The fast drift proxy failed the safety gate. On full X40, thresholds from `0.10` to `0.30` had false-negative rates from 50% to 100%, so the proxy must not be used to skip full confirmation.
+
 ### Karar
 
-Branch status: **KISMEN/STRONG_DIAGNOSTIC**.
+Branch status: **NEAR_PASS/CONFIRMATION_HEAVY**.
 
-The branch is not a full PASS because ranking flips remain material and the current tie-breaker full-confirms many near-tied candidates. It is also not a FAIL: risk isolation passed, and the medium-risk tie-breaker produced 10 certified domain-specific instances. The next step is to make the tie-breaker cheaper and more stable with a tolerance sweep and a fast drift proxy before running all X40 again.
+The branch is still not a full PASS because full-LP confirmation remains mandatory and the seeded variants use search-cost perturbation rather than native OR-Tools random seeds. But the result is stronger than `KISMEN/STRONG_DIAGNOSTIC`: the cost-controlled `0.5%` tie-breaker improved certified diversity and reduced ranking flips on the full X40 winner-producing set.
 
 ## 🔬 Quantum Extension (Phase 2b–2f)
 

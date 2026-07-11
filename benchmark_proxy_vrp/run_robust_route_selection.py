@@ -10,6 +10,7 @@ import pandas as pd
 from .cvrplib import customer_view, load_instance_json
 from .domain_adapters import available_adapters, get_adapter
 from .ortools_baselines import add_capacity_projected_plans, build_plans, vehicle_count_from_name
+from .route_cache import load_route, route_cache_key, store_route
 from .run_domain_engine import _solve_with_provider
 from .scenario_reduction import scenario_reduction_summary, select_representative_scenarios
 from .stochastic_engine import StochasticDecisionEngine, available_lp_backends, evaluate_solution
@@ -103,6 +104,17 @@ def main() -> None:
     )
     parser.add_argument("--stability-stockout-rel-threshold", type=float, default=0.05)
     parser.add_argument("--stability-cost-rel-threshold", type=float, default=0.05)
+    parser.add_argument(
+        "--route-cache-dir",
+        default=None,
+        help="Optional disk cache for route solver outputs. This avoids re-solving identical route candidates.",
+    )
+    parser.add_argument(
+        "--route-cache-mode",
+        choices=["readwrite", "readonly", "writeonly", "off"],
+        default="readwrite",
+        help="Route cache access mode when --route-cache-dir is provided.",
+    )
     args = parser.parse_args()
 
     out_dir = Path(args.out_dir)
@@ -115,12 +127,12 @@ def main() -> None:
     ranking_stability = _winner_ranking_stability(full_confirmation)
     full_confirmation = _attach_stability_status(full_confirmation, ranking_stability)
 
-    candidate_results.to_csv(out_dir / "robust_route_candidate_results.csv", index=False)
-    route_results.to_csv(out_dir / "robust_route_candidates.csv", index=False)
-    winners.to_csv(out_dir / "robust_route_winners.csv", index=False)
-    summary.to_csv(out_dir / "robust_route_selection_summary.csv", index=False)
-    full_confirmation.to_csv(out_dir / "robust_route_winner_full_confirmation.csv", index=False)
-    ranking_stability.to_csv(out_dir / "robust_route_winner_ranking_stability.csv", index=False)
+    _safe_to_csv(candidate_results, out_dir / "robust_route_candidate_results.csv")
+    _safe_to_csv(route_results, out_dir / "robust_route_candidates.csv")
+    _safe_to_csv(winners, out_dir / "robust_route_winners.csv")
+    _safe_to_csv(summary, out_dir / "robust_route_selection_summary.csv")
+    _safe_to_csv(full_confirmation, out_dir / "robust_route_winner_full_confirmation.csv")
+    _safe_to_csv(ranking_stability, out_dir / "robust_route_winner_ranking_stability.csv")
     _write_report(
         out_dir / "robust_route_selection_report.md",
         candidate_results=candidate_results,
@@ -315,13 +327,13 @@ def _solve_candidate_routes(
             try:
                 if randomized_variant is not None and provider != "ortools":
                     raise ValueError("randomized_route_variants_require_ortools")
-                route_set = _solve_with_provider(
+                route_set = _solve_route_candidate(
+                    args=args,
                     instance=instance,
-                    planned_customer_loads=planned_loads,
+                    planned_loads=planned_loads,
                     method=candidate_name,
-                    routing_provider=provider,
-                    vroom_url=args.vroom_url,
-                    time_limit_sec=args.time_limit_sec,
+                    provider=provider,
+                    plan_name=plan_name,
                     route_random_seed=randomized_variant.seed if randomized_variant else None,
                     route_cost_jitter=args.randomized_route_cost_jitter if randomized_variant else 0.0,
                 )
@@ -349,6 +361,55 @@ def _solve_candidate_routes(
                 )
             )
     return routes
+
+
+def _solve_route_candidate(
+    *,
+    args: argparse.Namespace,
+    instance,
+    planned_loads: np.ndarray,
+    method: str,
+    provider: str,
+    plan_name: str,
+    route_random_seed: int | None,
+    route_cost_jitter: float,
+):
+    cache_dir = _route_cache_dir(args)
+    key = route_cache_key(
+        instance_name=instance.name,
+        routing_provider=provider,
+        route_plan=plan_name,
+        planned_customer_loads=planned_loads,
+        time_limit_sec=args.time_limit_sec,
+        route_random_seed=route_random_seed,
+        route_cost_jitter=route_cost_jitter,
+    )
+    if cache_dir is not None and args.route_cache_mode in {"readwrite", "readonly"}:
+        cached = load_route(cache_dir, key)
+        if cached is not None:
+            return cached
+
+    route_set = _solve_with_provider(
+        instance=instance,
+        planned_customer_loads=planned_loads,
+        method=method,
+        routing_provider=provider,
+        vroom_url=args.vroom_url,
+        time_limit_sec=args.time_limit_sec,
+        route_random_seed=route_random_seed,
+        route_cost_jitter=route_cost_jitter,
+    )
+    if cache_dir is not None and args.route_cache_mode in {"readwrite", "writeonly"}:
+        store_route(cache_dir, key, route_set)
+    return route_set
+
+
+def _route_cache_dir(args: argparse.Namespace) -> Path | None:
+    raw = getattr(args, "route_cache_dir", None)
+    mode = getattr(args, "route_cache_mode", "readwrite")
+    if not raw or mode == "off":
+        return None
+    return Path(raw)
 
 
 def _route_rows(instance, routes: list[CandidateRoute], lp_summary: dict[str, object]) -> list[dict[str, object]]:
@@ -487,13 +548,13 @@ def _confirm_winners_full_scenario(
             continue
 
         try:
-            route_set = _solve_with_provider(
+            route_set = _solve_route_candidate(
+                args=args,
                 instance=instance,
-                planned_customer_loads=plans[plan_name],
+                planned_loads=plans[plan_name],
                 method=f"{provider}:{plan_name}:full_confirm",
-                routing_provider=provider,
-                vroom_url=args.vroom_url,
-                time_limit_sec=args.time_limit_sec,
+                provider=provider,
+                plan_name=plan_name,
                 route_random_seed=randomized_variants[plan_name].seed if plan_name in randomized_variants else None,
                 route_cost_jitter=args.randomized_route_cost_jitter if plan_name in randomized_variants else 0.0,
             )
@@ -741,6 +802,11 @@ def _markdown_table(df: pd.DataFrame) -> str:
     for _, row in display.iterrows():
         rows.append("| " + " | ".join(str(row[col]) for col in headers) + " |")
     return "\n".join(rows)
+
+
+def _safe_to_csv(frame: pd.DataFrame, path: Path) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    frame.to_csv(path, index=False)
 
 
 def _relative_drift(reference: float, candidate: float) -> float:

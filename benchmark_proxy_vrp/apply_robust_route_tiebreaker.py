@@ -38,6 +38,12 @@ def main() -> None:
     parser.add_argument("--stability-cost-rel-threshold", type=float, default=0.05)
     parser.add_argument("--randomized-route-variants", nargs="*", default=None)
     parser.add_argument("--randomized-route-cost-jitter", type=float, default=0.02)
+    parser.add_argument("--route-cache-dir", default=None)
+    parser.add_argument(
+        "--route-cache-mode",
+        choices=["readwrite", "readonly", "writeonly", "off"],
+        default="readwrite",
+    )
     args = parser.parse_args()
 
     run_dir = Path(args.run_dir)
@@ -59,6 +65,8 @@ def main() -> None:
         stability_cost_rel_threshold=args.stability_cost_rel_threshold,
         randomized_route_variants=args.randomized_route_variants,
         randomized_route_cost_jitter=args.randomized_route_cost_jitter,
+        route_cache_dir=args.route_cache_dir,
+        route_cache_mode=args.route_cache_mode,
     )
     full_near = _confirm_winners_full_scenario(confirm_args, Path(args.data_dir), near_candidates)
     full_near.to_csv(out_dir / "near_tied_candidate_full_confirmation.csv", index=False)
